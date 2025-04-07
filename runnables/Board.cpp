@@ -14,8 +14,7 @@
 //init board
 void Board::initializeBoard(){
     // Seed random number generator in your main function once
-    for (int i = 0; i < 2; i++)
-    {
+    for (int i = 0; i < 2; i++) {
         initializeTiles(i);  // This ensures each lane has a unique tile distribution
     }
 }
