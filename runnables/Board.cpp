@@ -12,56 +12,118 @@
 
 
 //init board
-void Board::initializeBoard(){
-    // Seed random number generator in your main function once
+void Board::initializeBoard(int boardType, int p2BoardType){
     for (int i = 0; i < 2; i++) {
-        initializeTiles(i);  // This ensures each lane has a unique tile distribution
+        if (i==0) {
+            initializeTiles(i, boardType); //Ensures unique distribution
+          } else {
+            initializeTiles(i, p2BoardType);
+          }
     }
 }
 
-#include <cstdlib> // For rand() and srand()
-#include <ctime>   // For time()
-
-void Board::initializeTiles(int player_index) {
+//creates each tile
+void Board::initializeTiles(int player_index, int boardType) {
     Tile temp;
-    int green_count = 0;
-    int total_tiles = _BOARD_SIZE;
+    int green_count = 0, special_tiles = 0; //, graveyard = 0, challenge = 0, advisor = 0, hyena = 0, oasis = 0;
+    int total_tiles = _BOARD_SIZE, tileType;
 
-    // Keep track of green tile positions to ensure we place exactly 30 greens
-    for (int i = 0; i < total_tiles; i++) {
-        if (i == total_tiles - 1) {
-            // Set the last tile as Orange for "Pride Rock"
-            temp.color = 'O';
-        } else if (i == 0) {
-            // Set the last tile as Orange for "Pride Rock"
-            temp.color = 'Y';
-        } else if (green_count < 30 && (rand() % (total_tiles - i) < 30 - green_count)) {
-            temp.color = 'G';
-            green_count++;
-        } else {
-            // Randomly assign one of the other colors: Blue, Pink, Brown, Red, Purple
-            int color_choice = rand() % 5;
-            switch (color_choice) {
-                case 0:
-                    temp.color = 'B'; // Blue
-                    break;
-                case 1:
-                    temp.color = 'P'; // Pink
-                    break;
-                case 2:
-                    temp.color = 'N'; // Brown
-                    break;
-                case 3:
-                    temp.color = 'R'; // Red
-                    break;
-                case 4:
-                    temp.color = 'U'; // Purple
-                    break;
+    if (boardType == 0) { // straight to pridelands
+        for (int i = 0; i < total_tiles; i++) {
+            tileType=rand()%20;
+            if (i == total_tiles - 1) {
+                temp.color = 'O'; //last block orange
+            } else if (i == 0) {
+                temp.color = 'Y'; //starting block yellow
+            } else if (green_count < 20 && rand() % (total_tiles-i) < 20 - green_count) {
+                temp.color = 'G'; //grasslands
+                green_count++;
+            } else if (tileType <= 4 && special_tiles < 30) {
+                temp.color = 'P'; // advisors will be pink
+                special_tiles++;
+                //advisor++;
+            } else if (tileType >= 10 && tileType <= 15 && special_tiles < 30) {
+                temp.color = 'R'; // red for challenge tile
+                special_tiles++;
+            } else if (i <= (total_tiles/2) && special_tiles < 30) {
+                tileType=rand()%20;
+                if (tileType >= 0 && tileType <= 10) {
+                    temp.color = 'U'; //purple, for graveyards
+                    special_tiles++;
+                    //graveyard++;
+                } else if (tileType > 10 && tileType <= 15) {
+                    temp.color = 'N'; //brown, for hyenas
+                    special_tiles++;
+                    //hyena++;
+                } else if ((tileType) == 18) {
+                    temp.color = 'B'; //blue for oasis
+                    special_tiles++;
+                    //oasis++;
+                }
+            } else if (i > (total_tiles/2) && special_tiles < 30) {
+                tileType=rand()%20;
+                if (tileType >= 0 && tileType <= 3) {
+                    temp.color = 'U'; //purple, for graveyards
+                    special_tiles++;
+                    //graveyard++;
+                } else if (tileType > 4 && tileType <= 7) {
+                    temp.color = 'N'; //brown, for hyenas
+                    special_tiles++;
+                    //hyena++;
+                } else if (tileType >= 10 && tileType <= 20) {
+                    temp.color = 'B'; //blue for oasis
+                    special_tiles++;
+                    //oasis++;
+                }
+            } else if (green_count < 20) {
+                temp.color = 'G';
+                green_count++;
             }
+            _tiles[player_index][i] = temp;
         }
-
-        // Assign the tile to the board for the specified lane
-        _tiles[player_index][i] = temp;
+    } else if (boardType == 1) { // cub training 
+        for (int i = 0; i < total_tiles; i++) {
+            tileType=rand()%20;
+            if (i == total_tiles - 1) {
+                temp.color = 'O'; //last block orange
+            } else if (i == 0) {
+                temp.color = 'Y'; //starting block grey
+            } else if (green_count < 30 && rand() % (total_tiles-i) < 30 - green_count) {
+                temp.color = 'G'; //grasslands
+                green_count++;
+            } else if (tileType <= 4 && special_tiles < 20) { //20% chance
+                temp.color = 'N'; //brown, for hyenas
+                special_tiles++;
+            } else if (tileType >= 10 && tileType <= 14) { //20% chance
+                temp.color = 'U'; //purple, for graveyards
+                special_tiles++;
+            } else if (tileType >= 15 && tileType <= 18) { //15% chance
+                temp.color = 'P'; // advisors will be pink
+                    special_tiles++;
+            } else if (i <= (total_tiles/2) && special_tiles < 20) { //first half of the board
+                tileType=rand()%20;
+                if (tileType >= 0 && tileType <= 5) { //25% chance
+                    temp.color = 'B'; //blue for oasis
+                    special_tiles++;
+                } else if (tileType >= 10 && tileType <= 14) { //15% chance
+                    temp.color = 'R'; // red for challenge tile
+                    special_tiles++;
+                }
+            } else if (i > (total_tiles/2) && special_tiles < 20) { //second half of the board
+                tileType=rand()%20;
+                if (tileType >= 0 && tileType <= 3) { //15% chance
+                    temp.color = 'B'; //blue for oasis
+                    special_tiles++;
+                } else if (tileType > 4 && tileType <= 10) { //30% chance
+                    temp.color = 'R'; // red for challenge tile
+                    special_tiles++;
+                }
+            } else if (green_count < 30) {
+                temp.color = 'G';
+                green_count++;
+            }
+            _tiles[player_index][i] = temp;
+        }
     }
 }
 
@@ -94,11 +156,10 @@ Board::Board(int player_count){
 
     // Initialize tiles
 
-    initializeBoard();
+    initializeBoard(0,0);
 }
 
-bool Board::isPlayerOnTile(int player_index, int pos)
-{
+bool Board::isPlayerOnTile(int player_index, int pos) {
     if (_player_position[player_index] == pos)
     {
         return true;
@@ -106,8 +167,7 @@ bool Board::isPlayerOnTile(int player_index, int pos)
     return false;
 }
 
-void Board::displayTile(int player_index, int pos)
-{
+void Board::displayTile(int player_index, int pos) {
     // string space = "                                       ";
     string color = "";
     int player = isPlayerOnTile(player_index, pos);
@@ -140,8 +200,7 @@ void Board::displayTile(int player_index, int pos)
     }
 }
 
-void Board::displayTrack(int player_index)
-{
+void Board::displayTrack(int player_index) {
     for (int i = 0; i < _BOARD_SIZE; i++)
     {
         displayTile(player_index, i);
@@ -149,8 +208,7 @@ void Board::displayTrack(int player_index)
     cout << endl;
 }
 
-void Board::displayBoard()
-{
+void Board::displayBoard() {
     for (int i = 0; i < 2; i++)
     {
         displayTrack(i);
@@ -170,8 +228,7 @@ bool Board::movePlayer(int player_index) {
     return false;
 }
 
-int Board::getPlayerPosition(int player_index) const
-{
+int Board::getPlayerPosition(int player_index) const {
     if (player_index >= 0 && player_index <= _player_count)
     {
         return _player_position[player_index];

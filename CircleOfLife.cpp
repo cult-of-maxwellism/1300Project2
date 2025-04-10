@@ -7,10 +7,12 @@
 
 //initial stuff
 int main () {
+    srand(time(0));
     Board gameBoard(2);
-    gameBoard.initializeBoard();
+    gameBoard.initializeBoard(0, 1);
     gameBoard.displayBoard();
 
+    /*
     gameBoard.movePlayer(0);
     gameBoard.getPlayerPosition(0);
     gameBoard.displayBoard();
@@ -21,6 +23,7 @@ int main () {
     gameBoard.displayBoard();
     cout << endl << "+++++++++++++++++" << endl << endl << "new board:" << endl;
 
+    
     for (int i = 0; i < 10; i++) {
         gameBoard.movePlayer(1);
         gameBoard.getPlayerPosition(1);
@@ -37,6 +40,7 @@ int main () {
     gameBoard.movePlayer(1);
     gameBoard.getPlayerPosition(1);
     gameBoard.displayBoard();
-    cout << endl << "+++++++++++++++++" << endl << endl << "new board:" << endl;
+    cout << endl << "+++++++++++++++++" << endl;
+    */
     return 0;
 }
