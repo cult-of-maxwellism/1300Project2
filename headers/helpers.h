@@ -1,5 +1,6 @@
 #include"libraries.h"
 
+/*
 class Menu {
     public:
     Menu();
@@ -7,4 +8,4 @@ class Menu {
     private: 
     string inputChecker(string);
 };
-
+*/

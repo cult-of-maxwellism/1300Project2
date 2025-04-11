@@ -25,7 +25,7 @@ void Board::initializeBoard(int boardType, int p2BoardType){
 //creates each tile
 void Board::initializeTiles(int player_index, int boardType) {
     Tile temp;
-    int green_count = 0, special_tiles = 0; //, graveyard = 0, challenge = 0, advisor = 0, hyena = 0, oasis = 0;
+    int green_count = 0, special_tiles = 0;
     int total_tiles = _BOARD_SIZE, tileType;
 
     if (boardType == 0) { // straight to pridelands
@@ -34,36 +34,32 @@ void Board::initializeTiles(int player_index, int boardType) {
             if (i == total_tiles - 1) {
                 temp.color = 'O'; //last block orange
             } else if (i == 0) {
-                temp.color = 'Y'; //starting block yellow
+                temp.color = 'Y'; //starting block grey
             } else if (green_count < 20 && rand() % (total_tiles-i) < 20 - green_count) {
                 temp.color = 'G'; //grasslands
                 green_count++;
             } else if (tileType <= 4 && special_tiles < 30) {
                 temp.color = 'P'; // advisors will be pink
                 special_tiles++;
-                //advisor++;
             } else if (tileType >= 10 && tileType <= 15 && special_tiles < 30) {
-                temp.color = 'R'; // red for challenge tile
+                temp.color = 'U'; // purple for challenge tile
                 special_tiles++;
             } else if (i <= (total_tiles/2) && special_tiles < 30) {
                 tileType=rand()%20;
                 if (tileType >= 0 && tileType <= 10) {
-                    temp.color = 'U'; //purple, for graveyards
+                    temp.color = 'R'; //red, for graveyards
                     special_tiles++;
-                    //graveyard++;
                 } else if (tileType > 10 && tileType <= 15) {
                     temp.color = 'N'; //brown, for hyenas
                     special_tiles++;
-                    //hyena++;
                 } else if ((tileType) == 18) {
                     temp.color = 'B'; //blue for oasis
                     special_tiles++;
-                    //oasis++;
                 }
             } else if (i > (total_tiles/2) && special_tiles < 30) {
                 tileType=rand()%20;
                 if (tileType >= 0 && tileType <= 3) {
-                    temp.color = 'U'; //purple, for graveyards
+                    temp.color = 'R'; //red, for graveyards
                     special_tiles++;
                     //graveyard++;
                 } else if (tileType > 4 && tileType <= 7) {
@@ -95,7 +91,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                 temp.color = 'N'; //brown, for hyenas
                 special_tiles++;
             } else if (tileType >= 10 && tileType <= 14) { //20% chance
-                temp.color = 'U'; //purple, for graveyards
+                temp.color = 'R'; //red, for graveyards
                 special_tiles++;
             } else if (tileType >= 15 && tileType <= 18) { //15% chance
                 temp.color = 'P'; // advisors will be pink
@@ -106,7 +102,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                     temp.color = 'B'; //blue for oasis
                     special_tiles++;
                 } else if (tileType >= 10 && tileType <= 14) { //15% chance
-                    temp.color = 'R'; // red for challenge tile
+                    temp.color = 'U'; // red for challenge tile
                     special_tiles++;
                 }
             } else if (i > (total_tiles/2) && special_tiles < 20) { //second half of the board
@@ -115,7 +111,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                     temp.color = 'B'; //blue for oasis
                     special_tiles++;
                 } else if (tileType > 4 && tileType <= 10) { //30% chance
-                    temp.color = 'R'; // red for challenge tile
+                    temp.color = 'R'; //purple for challenge tile
                     special_tiles++;
                 }
             } else if (green_count < 30) {
