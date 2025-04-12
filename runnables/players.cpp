@@ -1,5 +1,13 @@
 #include"../headers/player.h"
 
+void Player() {
+
+}
+
+void Player(int num) {
+
+}
+
 void Player::menu () {
     int userInput=0;
 
@@ -20,11 +28,11 @@ void Player::menu () {
             break;
             case 2:
             cout << "Player " << playerName << " progress:" << endl
-            << "Age:      " << age << endl
-            << "Stamina:  " << stamina << endl
-            << "Strength: " << strength << endl
-            << "Wisdom:   " << wisdom << endl
-            << "Pride:    " << pride << endl;
+            << "Age:      " << _age << endl
+            << "Stamina:  " << _stamina << endl
+            << "Strength: " << _strength << endl
+            << "Wisdom:   " << _wisdom << endl
+            << "Pride:    " << _pride << endl;
 
             break;
             case 3:
@@ -44,6 +52,52 @@ void Player::menu () {
     }
 }
 
-string Player::inputChecker (string) {
-    return "jhaha";
+//getter
+int Player::getStamina() {
+    return _stamina;
+}
+int Player::getStrength() {
+    return _strength;
+}
+int Player::getWisdom() {
+    return _wisdom;
+}
+int Player::getPride() {
+    return _pride;
+}
+int Player::getLocation() {
+    return _location;
+}
+
+void Player::setAdvisor(Advisor chosen) {
+    //this is gonna do a little compare to make sure it won't just put a blank advisor in, then it'll set advisor.
+}
+
+void Player::changeStamina (int newStam) {
+    if (newStam >= 0) {
+        _stamina = newStam;
+    }
+}
+void Player::changeStrength (int newStr) {
+    if (newStr >= 0) {
+        _strength = newStr;
+    }
+}
+void Player::changeWisdom(int newWis) {
+    if (newWis >= 0) {
+        _wisdom = newWis;
+    }
+}
+void Player::changePride(int newPride) {
+    if (newPride >= 0) {
+        _pride = newPride;
+    }
+}
+void Player::move (int movement) {
+    //complicated move stuff
+}
+
+
+int Player::inputChecker (string) {
+    return 2;
 }

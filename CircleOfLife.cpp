@@ -14,6 +14,8 @@ int spinner () {
 int main () {
     srand(time(0));
 
+    //going to retheme, considering sci-fi or western theme...
+
     cout << "Welcome to..." << endl
     <<
 "···································································\n" <<
@@ -52,6 +54,15 @@ int main () {
     gameBoard.initializeBoard(0, 1);
     gameBoard.displayBoard();
 
-    // we're going to interact essentially entirey through 
+    // we're going to interact essentially entirey through gamemaster functions, I'll need to make those return player turns
+    // gamemaster init
+    // for loop until gamemaster returns a non-player number (-1)
+        // int playerTurn = 0;
+        // playerTurn = game.gamemaster(playerTurn); - I think something like this? Need to make sure it flips btwn players
+        // 
+    // game.ending, then credits
+
+    cout << "Thanks for playing! Congratulations, or better luck next time buddy." << endl;
+
     return 0;
 }
