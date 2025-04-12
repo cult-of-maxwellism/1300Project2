@@ -1,5 +1,21 @@
 //#include"../headers/libraries.h"
 #include"../headers/game.h"
+#include"../headers/player.h"
+#include"../headers/Board.h"
+
+void Game () {
+    //need to figure out what goes in the default constructor
+    //player
+    //board
+    //events
+    //advisors
+    //characters
+    //riddles
+}
+
+void Game (Player players[], Board gameBoard, string eventsFile, string advisorFile, string characterFile, string riddleFile) {
+
+}
 
 void Game::gameMaster () {
     string filename = "";
