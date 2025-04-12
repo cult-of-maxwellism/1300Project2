@@ -207,6 +207,7 @@ void Board::displayTrack(int player_index) {
 void Board::displayBoard() {
     for (int i = 0; i < 2; i++)
     {
+        cout << "Player " << i+1 << "\'s Board:" << endl;
         displayTrack(i);
         if (i == 0) {
             cout << endl << endl;  // Add an extra line between the two lanes
