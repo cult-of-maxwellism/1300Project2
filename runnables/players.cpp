@@ -1,11 +1,32 @@
 #include"../headers/player.h"
 
-void Player() {
+/* Bottom Line Up Front:
+The Player class will contain the player's number, advisor, location and statistics.
+
+The primary function used by the Player stat will be the menu (for now - if I add a combat system,
+that nmight change).
+
+Outside of that, the player is basically a slightly more important struct to me right now. I promise, I will 
+add more - I might allow players to set their own Player character within certian parameters, we'll see.
+*/
+
+Player::Player() {
+    _playerNum = 0;
+    _strength = 0;
+    _age = 0;
+    _wisdom = 0;
+    _stamina = 0;
+    _location = 0;
 
 }
 
-void Player(int num) {
-
+Player::Player(int num, int age, int stam, int str, int wis, int pride) {
+    _playerNum = num;
+    _age = age;
+    _stamina = stam;
+    _strength = str;
+    _wisdom = wis;
+    _pride = pride;
 }
 
 void Player::menu () {
@@ -53,21 +74,13 @@ void Player::menu () {
 }
 
 //getter
-int Player::getStamina() {
-    return _stamina;
-}
-int Player::getStrength() {
-    return _strength;
-}
-int Player::getWisdom() {
-    return _wisdom;
-}
-int Player::getPride() {
-    return _pride;
-}
-int Player::getLocation() {
-    return _location;
-}
+int Player::getStamina() { return _stamina; }
+int Player::getStrength() { return _strength; }
+int Player::getWisdom() { return _wisdom; }
+int Player::getPride() { return _pride; }
+int Player::getLocation() { return _location; }
+int Player::getPlayerNum() {return _playerNum; }
+Advisor Player::getPlayerAdvisor() { return playerAdvisor; }
 
 void Player::setAdvisor(Advisor chosen) {
     //this is gonna do a little compare to make sure it won't just put a blank advisor in, then it'll set advisor.

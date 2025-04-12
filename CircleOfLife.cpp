@@ -1,9 +1,10 @@
 //header files:
-#include"headers/libraries.h"
-//#include"headers/helpers.h"
+#include"headers/libraries.h" //this is actively being used. IDK what VS Code is on about.
 #include"headers/player.h"
 #include"headers/game.h"
 #include"headers/Board.h"
+
+//these headers will eventually be used, I promise!
 
 int spinner () {
     int result = rand()%6;

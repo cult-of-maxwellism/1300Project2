@@ -3,6 +3,25 @@
 #include"../headers/player.h"
 #include"../headers/Board.h"
 
+/* this is it, the functions where everything happens!
+
+BLUF:
+
+In here, I want to have a function which tracks the location of all players and does the board display function, and
+functions to split the text files up into vectors of characters, advisors, riddles, and events.
+
+Variable-wise, I want vectors of players, characters, advisors, riddles, and events.
+
+I then want two functions: gamemasterInit and gamemaster. GMI will do the printing of a character array, some flavor
+text, and the "select character" and "select path" menu.
+
+Gamemaster will essentially act as a turn, returning the value of the next player's turn (i.e. if player 1 just played, it'll
+return the value for Player 2). In theory, GM should open the player menu, move the player, handle events (both tile and random),
+possibly integrate a combat system, then hand it off to the second player.
+
+Finally, I want a endgame function. This displays stats between the two players and tells us who's the winner.
+*/
+
 //constructors
 void Game () {
     //need to figure out what goes in the default constructor

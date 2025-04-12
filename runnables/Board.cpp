@@ -10,6 +10,7 @@
 #define GREY "\033[48;2;128;128;128m" /* Grey (128,128,128) */
 #define RESET "\033[0m"
 
+//the logic in this needs to be reworked for balance, I'm also considering changing a lot on how initializeTiles works.
 
 //init board
 void Board::initializeBoard(int boardType, int p2BoardType){
