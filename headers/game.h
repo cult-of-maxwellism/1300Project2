@@ -46,6 +46,7 @@ class Game {
     void loadGame(string savedGame);
 
     //variables
-    vector<Characters> characters;
-    vector<Advisor> advisors;
+    vector<Characters> _characters;
+    vector<Advisor> _advisors;
+    vector<Events> _event;
 };
