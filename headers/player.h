@@ -7,7 +7,7 @@ class Player {
     public:
     //constructor
     Player();
-    Player(int num, int age, int stam, int str, int wis, int pride);
+    Player(int num, int age, int stam, int str, int wis, int points);
     //function
     void menu();
     //getter
@@ -38,6 +38,7 @@ class Player {
     int _wisdom;
     int _points;
     int _location;
+    int _boardType;
 
     Advisor playerAdvisor;
     std::string playerName;

@@ -16,12 +16,12 @@
 using namespace std;
 
 //init board
-void Board::initializeBoard(int boardType, int p2BoardType){
+void Board::initializeBoard(int boardType){
     for (int i = 0; i < 2; i++) {
         if (i==0) {
-            initializeTiles(i, boardType); //Ensures unique distribution
+            initializeTiles(i, i); //Ensures unique distribution
           } else {
-            initializeTiles(i, p2BoardType);
+            initializeTiles(i, i);
           }
     }
 }
@@ -32,7 +32,7 @@ void Board::initializeTiles(int player_index, int boardType) {
     int green_count = 0, special_tiles = 0;
     int total_tiles = _BOARD_SIZE, tileType;
 
-    if (boardType == 0) { // straight to pridelands
+    if (boardType == 0) { // Normal Difficulty
         for (int i = 0; i < total_tiles; i++) {
             tileType=rand()%20;
             if (i == total_tiles - 1) {
@@ -140,23 +140,22 @@ void Board::initializeTiles(int player_index, int boardType) {
 // }
 
 //constructor
-Board::Board(int player_count){
-    if (player_count > _MAX_PLAYERS)
-    {
+Board::Board (Player players[], int player_count){
+    if (player_count > _MAX_PLAYERS) {
         _player_count = _MAX_PLAYERS;
     } else {
         _player_count = player_count;
     }
 
     // Initialize player position
-    for (int i = 0; i < _player_count; i++)
-    {
+    for (int i = 0; i < _player_count; i++) {
         _player_position[i] = 0;
+        _players[i] = players[i];
     }
 
     // Initialize tiles
 
-    initializeBoard(0,0);
+    initializeBoard(0);
 }
 
 bool Board::isPlayerOnTile(int player_index, int pos) {

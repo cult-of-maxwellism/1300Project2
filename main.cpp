@@ -5,7 +5,7 @@
 //#include"headers/helpers.h"
 //#include"headers/player.h"
 #include"headers/game.h"
-#include"headers/Board.h"
+//#include"headers/Board.h"
 
 using namespace std;
 
@@ -58,9 +58,9 @@ int main () {
 
     Game myGame;
 
-    Board gameBoard(2);
-    gameBoard.initializeBoard(0, 1);
-    gameBoard.displayBoard();
+    //Board gameBoard(2);
+    //gameBoard.initializeBoard(0);
+    //gameBoard.displayBoard();
 
     myGame.gameMasterInit();
 

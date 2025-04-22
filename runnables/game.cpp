@@ -26,6 +26,7 @@ Finally, I want a endgame function. This displays stats between the two players 
 
 //constructors
 Game::Game () {
+    /*
     advisorPuller("../input_files/advisors.txt");
     cout << "Advisors good!" << endl;
     characterPuller("../input_files/characters.txt");
@@ -34,6 +35,7 @@ Game::Game () {
     cout << "Events good!" << endl;
     riddlePuller("../input_files/riddles.txt");
     cout << "Riddles good!" << endl;
+    */
 
     int spin = rand()%2;
     switch (spinner()+(spin-1)) {
