@@ -1,11 +1,8 @@
-#ifndef BOARD_H
-#define BOARD_H
+#pragma once
 #include "Tile.h"
-#include "libraries.h"
 //the logic in this needs to be reworked for balance, I'm also considering changing a lot on how initializeTiles works.
 
-class Board
-{
+class Board {
 private:
     static const int _BOARD_SIZE = 52;
     Tile _tiles[2][_BOARD_SIZE];
@@ -25,5 +22,3 @@ public:
     bool movePlayer(int player_index);
     int getPlayerPosition(int player_index) const;
 };
-
-#endif

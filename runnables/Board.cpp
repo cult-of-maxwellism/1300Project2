@@ -1,5 +1,8 @@
 #include "../headers/Board.h"
-#include "../headers/libraries.h"
+//#include "../headers/libraries.h"
+#include<stdlib.h>
+#include<iostream>
+
 #define RED "\033[48;2;230;10;10m"
 #define GREEN "\033[48;2;34;139;34m"  /* Grassy Green (34,139,34) */
 #define BLUE "\033[48;2;10;10;230m"
@@ -10,7 +13,7 @@
 #define GREY "\033[48;2;128;128;128m" /* Grey (128,128,128) */
 #define RESET "\033[0m"
 
-//the logic in this needs to be reworked for balance, I'm also considering changing a lot on how initializeTiles works.
+using namespace std;
 
 //init board
 void Board::initializeBoard(int boardType, int p2BoardType){
@@ -198,16 +201,14 @@ void Board::displayTile(int player_index, int pos) {
 }
 
 void Board::displayTrack(int player_index) {
-    for (int i = 0; i < _BOARD_SIZE; i++)
-    {
+    for (int i = 0; i < _BOARD_SIZE; i++) {
         displayTile(player_index, i);
     }
     cout << endl;
 }
 
 void Board::displayBoard() {
-    for (int i = 0; i < 2; i++)
-    {
+    for (int i = 0; i < 2; i++) {
         cout << "Player " << i+1 << "\'s Board:" << endl;
         displayTrack(i);
         if (i == 0) {
@@ -227,8 +228,7 @@ bool Board::movePlayer(int player_index) {
 }
 
 int Board::getPlayerPosition(int player_index) const {
-    if (player_index >= 0 && player_index <= _player_count)
-    {
+    if (player_index >= 0 && player_index <= _player_count) {
         return _player_position[player_index];
     }
     return -1;

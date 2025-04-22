@@ -1,52 +1,49 @@
 #pragma once
-//this essentially replaces the old "guard" ifndef & define statements.
-// This ensures these definitions are only included once on compile, and
-// prevents errors coming from the compiler trying to figure out why I keep
-// redefining everything.
 
-#include"libraries.h"
-#include"helpers.h"
+#include<string>
+#include<vector>
 
-/* this is it, the functions where everything happens!
-
-BLUF:
-
-In here, I want to have a function which tracks the location of all players and does the board display function, and
-functions to split the text files up into vectors of characters, advisors, riddles, and events.
-
-Variable-wise, I want vectors of players, characters, advisors, riddles, and events.
-
-I then want two functions: gamemasterInit and gamemaster. GMI will do the printing of a character array, some flavor
-text, and the "select character" and "select path" menu.
-
-Gamemaster will essentially act as a turn, returning the value of the next player's turn (i.e. if player 1 just played, it'll
-return the value for Player 2). In theory, GM should open the player menu, move the player, handle events (both tile and random),
-possibly integrate a combat system, then hand it off to the second player.
-
-Finally, I want a endgame function. This displays stats between the two players and tells us who's the winner.
-*/
+#include"advisors.h"
+#include"characters.h"
+#include"events.h"
+#include"player.h"
+#include"riddles.h"
 
 class Game {
     public:
-    //game function
-    int gameMaster (int player);
-    void gameMasterInit ();
-
     //constructor
     Game();
-    Game(int playerNumber, string eventsFile, string advisorFile, string characterFile, string riddleFile);
+    Game(int playerNumber, std::string eventsFile, std::string advisorFile, std::string characterFile, std::string riddleFile);
+
+    //game function
+    void gameMaster ();
+    void gameMasterInit ();
+    //turn function, incredibly important
+    int turn(int player);
 
     private:
-    //functions
-    void advisorPuller(string filename);
-    void characterPuller(string filename);
+    //vector builders for each struct
+    void advisorPuller(std::string filename);
+    void characterPuller(std::string filename);
+    void eventPuller(std::string filename);
+    void riddlePuller(std::string filename);
+
+    //Selector and menu functions
     void characterSelect();
     void advisorSelect();
+    void mainMenu();
+    void gameOver();
+    void highScore();
+
+    //save, load, combat, and other stretch goals
     void saveGame();
-    void loadGame(string savedGame);
+    void loadGame(std::string savedGame);
+    void combat(int player, int scenario);
 
     //variables
-    vector<Characters> _characters;
-    vector<Advisor> _advisors;
-    vector<Events> _event;
+    std::vector<Characters> _characters;
+    std::vector<Advisor> _advisors;
+    std::vector<Events> _events;
+    std::vector<Riddles> _riddles;
+    std::vector<Player> _players;
 };

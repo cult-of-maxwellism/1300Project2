@@ -1,4 +1,3 @@
-struct Tile
-{
+struct Tile {
     char color;
 };

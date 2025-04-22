@@ -1,3 +1,4 @@
+/*
 #pragma once
 //this essentially replaces the old "guard" ifndef & define statements.
 // This ensures these definitions are only included once on compile, and
@@ -6,17 +7,17 @@
 
 #include"libraries.h"
 
+#include <memory>
 #include<string>
 using namespace std;
 
 struct Advisor {
-    string name, abilityText;
-    int ability;
+    string name, ability, abilityDesc;
 };
 
 struct Characters {
     string name;
-    int age, stamina, strength, wisdom, pride;
+    int age, stamina, strength, wisdom, points;
 };
 
 struct Events {
@@ -27,7 +28,9 @@ struct Events {
 struct Riddles {
     string riddle, type, answer;
 };
-/*
+
+int spinner ();
+
 class Menu {
     public:
     Menu();

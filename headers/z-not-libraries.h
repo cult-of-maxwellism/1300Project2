@@ -5,6 +5,7 @@
 #include<vector>
 #include<ostream>
 #include<string>
+#include<fstream>
 
 #pragma once
 //this essentially replaces the old "guard" ifndef & define statements.

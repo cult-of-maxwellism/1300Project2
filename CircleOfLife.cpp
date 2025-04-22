@@ -1,15 +1,17 @@
+#include<iostream>
+
 //header files:
-#include"headers/libraries.h" //this is actively being used. IDK what VS Code is on about.
-#include"headers/player.h"
+//#include"headers/libraries.h" //this is actively being used. IDK what VS Code is on about.
+//#include"headers/helpers.h"
+//#include"headers/player.h"
 #include"headers/game.h"
 #include"headers/Board.h"
 
+using namespace std;
+
 //these headers will eventually be used, I promise!
 
-int spinner () {
-    int result = rand()%6;
-    return result+1;
-}
+//int spinner();
 
 //initial stuff
 int main () {
@@ -25,8 +27,9 @@ int main () {
 ":  | | | ' \\/ -_) | (__| | '_/ _| / -_) / _ \\  _| | |__| |  _/ -_):\n" <<
 ":  |_| |_||_\\___|  \\___|_|_| \\__|_\\___| \\___/_|   |____|_|_| \\___|:\n" <<
 "···································································\n" << endl;
-
-    switch (spinner()) {
+/*
+    int spin = rand()%6;
+    switch (spin) {
         case 0:
         cout << "which is definitely legally distinct from The Lion King." << endl;
         break;
@@ -46,14 +49,20 @@ int main () {
         cout << "Slimy... Yet Satisfying." << endl;
         break;
         default:
-        cout << "which is definitely legally distinct from The Lion King." << endl;
+        cout << "Your mom definitely approves." << endl;
     }
     
     cout << endl;
+*/
+    //Game myGame(2, "help.txt", "help.txt", "help.txt", "help.txt");
+
+    Game myGame;
 
     Board gameBoard(2);
     gameBoard.initializeBoard(0, 1);
     gameBoard.displayBoard();
+
+    myGame.gameMasterInit();
 
     // we're going to interact essentially entirey through gamemaster functions, I'll need to make those return player turns
     // gamemaster init

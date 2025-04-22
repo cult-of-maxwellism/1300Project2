@@ -1,3 +1,5 @@
+#include<iostream>
+
 #include"../headers/player.h"
 
 /* Bottom Line Up Front:
@@ -10,6 +12,8 @@ Outside of that, the player is basically a slightly more important struct to me 
 add more - I might allow players to set their own Player character within certian parameters, we'll see.
 */
 
+using namespace std;
+
 Player::Player() {
     _playerNum = 0;
     _strength = 0;
@@ -20,13 +24,14 @@ Player::Player() {
 
 }
 
-Player::Player(int num, int age, int stam, int str, int wis, int pride) {
+Player::Player(int num, int age, int stam, int str, int wis, int points) {
     _playerNum = num;
     _age = age;
     _stamina = stam;
     _strength = str;
     _wisdom = wis;
-    _pride = pride;
+    _points = points;
+    _location = 0;
 }
 
 void Player::menu () {
@@ -53,7 +58,7 @@ void Player::menu () {
             << "Stamina:  " << _stamina << endl
             << "Strength: " << _strength << endl
             << "Wisdom:   " << _wisdom << endl
-            << "Pride:    " << _pride << endl;
+            << "Points:   " << _points << endl;
 
             break;
             case 3:
@@ -77,7 +82,7 @@ void Player::menu () {
 int Player::getStamina() { return _stamina; }
 int Player::getStrength() { return _strength; }
 int Player::getWisdom() { return _wisdom; }
-int Player::getPride() { return _pride; }
+int Player::getPoints() { return _points; }
 int Player::getLocation() { return _location; }
 int Player::getPlayerNum() {return _playerNum; }
 Advisor Player::getPlayerAdvisor() { return playerAdvisor; }
@@ -101,9 +106,9 @@ void Player::changeWisdom(int newWis) {
         _wisdom = newWis;
     }
 }
-void Player::changePride(int newPride) {
-    if (newPride >= 0) {
-        _pride = newPride;
+void Player::changePoints(int newPoints) {
+    if (newPoints >= 0) {
+        _points = newPoints;
     }
 }
 void Player::move (int movement) {
