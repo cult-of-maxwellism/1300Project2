@@ -140,7 +140,7 @@ void Board::initializeTiles(int player_index, int boardType) {
 // }
 
 //constructor
-Board::Board (Player players[], int player_count){
+Board::Board (int players[2][2], int player_count){
     if (player_count > _MAX_PLAYERS) {
         _player_count = _MAX_PLAYERS;
     } else {
@@ -150,7 +150,8 @@ Board::Board (Player players[], int player_count){
     // Initialize player position
     for (int i = 0; i < _player_count; i++) {
         _player_position[i] = 0;
-        _players[i] = players[i];
+        _player_arr[i][1] = _player_position[i];
+        //_players[i] = players[i];
     }
 
     // Initialize tiles
@@ -159,64 +160,67 @@ Board::Board (Player players[], int player_count){
 }
 
 bool Board::isPlayerOnTile(int player_index, int pos) {
-    if (_player_position[player_index] == pos)
-    {
+    if (_player_position[player_index] == pos) {
         return true;
     }
     return false;
 }
 
-void Board::displayTile(int player_index, int pos) {
+void Board::displayTile(int board_type, int pos) {
     // string space = "                                       ";
     string color = "";
-    int player = isPlayerOnTile(player_index, pos);
+    bool isPlayerHere = isPlayerOnTile(board_type, pos);
 
     // Template for displaying a tile: <line filler space> <color start> |<player symbol or blank space>| <reset color> <line filler space> <endl>
 
     // Determine color to display
-    if (_tiles[player_index][pos].color == 'R') {
+    if (_tiles[board_type][pos].color == 'R') {
         color = RED;
-    } else if (_tiles[player_index][pos].color == 'G') {
+    } else if (_tiles[board_type][pos].color == 'G') {
         color = GREEN;
-    } else if (_tiles[player_index][pos].color == 'B') {
+    } else if (_tiles[board_type][pos].color == 'B') {
         color = BLUE;
-    } else if (_tiles[player_index][pos].color == 'U') {
+    } else if (_tiles[board_type][pos].color == 'U') {
         color = PURPLE;
-    } else if (_tiles[player_index][pos].color == 'N') {
+    } else if (_tiles[board_type][pos].color == 'N') {
         color = BROWN;
-    } else if (_tiles[player_index][pos].color == 'P') {
+    } else if (_tiles[board_type][pos].color == 'P') {
         color = PINK;
-    } else if (_tiles[player_index][pos].color == 'O') {
+    } else if (_tiles[board_type][pos].color == 'O') {
         color = ORANGE;
-    } else if (_tiles[player_index][pos].color == 'Y') {
+    } else if (_tiles[board_type][pos].color == 'Y') {
         color = GREY;
+    } else {
+        color = GREEN; //default to green if no color or weird color.
     }
 
-    if (player == true) {
-        cout << color << "|" << (player_index + 1) << "|" << RESET;
+    if (isPlayerHere == true) {
+        cout << color << "|" << (board_type + 1) << "|" << RESET;
     } else {
         cout << color << "| |" << RESET;
     }
 }
 
-void Board::displayTrack(int player_index) {
+void Board::displayTrack(int board_type) {
     for (int i = 0; i < _BOARD_SIZE; i++) {
-        displayTile(player_index, i);
+        displayTile(board_type, i);
     }
     cout << endl;
 }
 
 void Board::displayBoard() {
     for (int i = 0; i < 2; i++) {
-        cout << "Player " << i+1 << "\'s Board:" << endl;
-        displayTrack(i);
         if (i == 0) {
-            cout << endl << endl;  // Add an extra line between the two lanes
+            cout << "Normal Difficulty:" << endl;
+        } else {
+            cout << "Easy Difficulty:" << endl;
         }
+        displayTrack(i);
+        cout << endl;  // Add an extra line between the two lanes
     }
 }
 
-bool Board::movePlayer(int player_index) {
+bool Board::movePlayer(int player_index, int distance) {
     // Increment player position
     _player_position[player_index]++;
     if (_player_position[player_index] == _BOARD_SIZE - 1) {

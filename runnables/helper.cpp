@@ -1,6 +1,9 @@
-#include"../headers/libraries.h"
+//#include"../headers/libraries.h"
+//#include"../headers/spinner.h"
 
 //useless .cpp file for now, I plan on including misc functions as I add functionality here.
+/*
+using namespace std;
 
 void sortMe () {}
 
@@ -29,3 +32,4 @@ struct Riddles {
 };
 
 //int spinner ();
+*/

@@ -1,8 +1,10 @@
+#include <csignal>
 #include<iostream>
 #include<fstream>
 
 #include"../headers/game.h"
 #include"../headers/spinner.h"
+#include"../headers/Board.h"
 
 using namespace std;
 /* this is it, the functions where everything happens!
@@ -79,6 +81,7 @@ Game::Game(int playerNumber, string eventsFile, string advisorFile, string chara
 
 //Gameplay functions
 void Game::gameMasterInit () {
+    /*
     advisorPuller("input_files/advisors.txt");
     cout << "Advisors good!" << endl;
     characterPuller("input_files/characters.txt");
@@ -87,7 +90,9 @@ void Game::gameMasterInit () {
     cout << "Events good!" << endl;
     riddlePuller("input_files/riddles.txt");
     cout << "Riddles good!" << endl;
+    */
 
+    //splash screen
     int spin = rand()%2;
     switch (spinner()+(spin-1)) {
         case 0:
@@ -113,12 +118,42 @@ void Game::gameMasterInit () {
     }
     
     cout << endl;
+
+    int playerNum = 0, boardSelect=0;
+    while (playerNum > 2 || playerNum <= 0) {
+        cout << "Enter number of players (1 to 2)" << endl;
+        cin >> playerNum;
+        if (playerNum != 1 && playerNum != 2) {
+            cout << "please double check your maths." << endl;
+        }
+    }
+
+    while (playerNum != 0) {
+        cout << "Player " << playerNum << " , tell me. Do you want to play normal (1) or easy (2)?" << endl;
+        cin >> boardSelect;
+        Player temp(playerNum-1, 10, 10, 10, 10, 10, boardSelect);
+        _players[playerNum-1] = temp;
+        playerNum--;
+    }
+
+    //Board gameBoard(_players, 2);
+    //gameBoard.initializeBoard(0);
+    //gameBoard.displayBoard();
+
     // this will split all the text files into the vectors used from here on out
     // additionally, it'll display the character array
     // Finally, it will ask players to select a character and a path.
 }
 
 void Game::gameMaster () {
+    bool gameOver = false;
+    int which_turn = 0;
+    while (gameOver == false) {
+        which_turn = turn(which_turn);
+        if (which_turn == -1) {
+            gameOver = true;
+        }
+    }
     // this will be most of the game. The basic logic loop is as follows:
     // Player menu opened
     // Once menu is closed, spinner to move
@@ -135,7 +170,7 @@ void Game::gameMaster () {
 }
 
 int Game::turn (int player) {
-    Player currentPlayer = _players.at(player);
+    Player currentPlayer = _players[player];
 
     currentPlayer.menu();
 
@@ -159,7 +194,7 @@ void Game::advisorPuller(string filename) {
     Advisor currentAdvisor;
 
     while (getline(file_in, current_text, '|')) {
-        if (current_text != "name" || current_text != "ability" || current_text != "description") {
+        if (current_text != "name" && current_text != "ability" && current_text != "description") {
             if (idx == 0) {
                 currentAdvisor.name=current_text;
                 idx ++;

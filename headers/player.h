@@ -7,7 +7,7 @@ class Player {
     public:
     //constructor
     Player();
-    Player(int num, int age, int stam, int str, int wis, int points);
+    Player(int num, int age, int stam, int str, int wis, int points, int board);
     //function
     void menu();
     //getter

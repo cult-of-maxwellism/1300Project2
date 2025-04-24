@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 
 #include<string>
 #include<vector>
@@ -45,5 +45,6 @@ class Game {
     std::vector<Advisor> _advisors;
     std::vector<Events> _events;
     std::vector<Riddles> _riddles;
-    std::vector<Player> _players;
+    //std::vector<Player> _players;
+    Player _players[2];
 };

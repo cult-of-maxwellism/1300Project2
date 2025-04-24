@@ -24,7 +24,7 @@ Player::Player() {
 
 }
 
-Player::Player(int num, int age, int stam, int str, int wis, int points) {
+Player::Player(int num, int age, int stam, int str, int wis, int points, int board) {
     _playerNum = num;
     _age = age;
     _stamina = stam;
@@ -32,6 +32,7 @@ Player::Player(int num, int age, int stam, int str, int wis, int points) {
     _wisdom = wis;
     _points = points;
     _location = 0;
+    _boardType = board;
 }
 
 void Player::menu () {
