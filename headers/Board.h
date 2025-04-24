@@ -12,7 +12,7 @@ private:
     Tile _tiles[2][_BOARD_SIZE]; //_tiles[0] is the board for normal, _tiles[1] is the board for easy
     static const int _MAX_PLAYERS = 2;
     int _player_count;
-    int _player_position[_MAX_PLAYERS];
+    //int _player_position[_MAX_PLAYERS];
     int _player_arr [2][2]; // pos[x][0] is player position, pos[x][1] is board type
     //Player _players[_MAX_PLAYERS];
     void displayTile(int player_index, int pos);

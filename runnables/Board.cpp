@@ -149,8 +149,8 @@ Board::Board (int players[2][2], int player_count){
 
     // Initialize player position
     for (int i = 0; i < _player_count; i++) {
-        _player_position[i] = 0;
-        _player_arr[i][1] = _player_position[i];
+        //_player_position[i] = 0;
+        _player_arr[i][0] = 0; //_player_position[i];
         //_players[i] = players[i];
     }
 
@@ -160,7 +160,7 @@ Board::Board (int players[2][2], int player_count){
 }
 
 bool Board::isPlayerOnTile(int player_index, int pos) {
-    if (_player_position[player_index] == pos) {
+    if (_player_arr[player_index][0] == pos) {
         return true;
     }
     return false;
@@ -169,7 +169,8 @@ bool Board::isPlayerOnTile(int player_index, int pos) {
 void Board::displayTile(int board_type, int pos) {
     // string space = "                                       ";
     string color = "";
-    bool isPlayerHere = isPlayerOnTile(board_type, pos);
+    //bool isPlayerHere; = isPlayerOnTile(board_type, pos);
+    //bool isBothPlayers = false;
 
     // Template for displaying a tile: <line filler space> <color start> |<player symbol or blank space>| <reset color> <line filler space> <endl>
 
@@ -194,11 +195,31 @@ void Board::displayTile(int board_type, int pos) {
         color = GREEN; //default to green if no color or weird color.
     }
 
+    if (_player_arr[0][0] == pos && _player_arr[1][0] == pos) {
+        cout << color << "|1 & 2|" << RESET;
+    } else if (_player_arr[0][0] == pos && _player_arr[1][0] != pos) {
+        cout << color << "| 1 |" << RESET;
+    } else if (_player_arr[1][0]== pos && _player_arr[0][0] != pos) {
+        cout << color << "| 2 |" << RESET;
+    } else {
+        cout << color << "|  |" << RESET;
+    }
+    /*
+    for (int i = 0; i < _player_count; i++) {
+        if (isPlayerOnTile(_player_arr[i][0], pos)) {
+            isPlayerHere = true;
+            if (i >= 1 && isPlayerHere) {
+                isBothPlayers = true;
+            }
+        }
+    }
+
     if (isPlayerHere == true) {
         cout << color << "|" << (board_type + 1) << "|" << RESET;
     } else {
         cout << color << "| |" << RESET;
     }
+    */
 }
 
 void Board::displayTrack(int board_type) {
@@ -222,17 +243,25 @@ void Board::displayBoard() {
 
 bool Board::movePlayer(int player_index, int distance) {
     // Increment player position
+    _player_arr[player_index][0] += distance;
+
+    if (_player_arr[player_index][0] == _BOARD_SIZE - 1) {
+        //player reached last tile
+        return true;
+    }
+    /*
     _player_position[player_index]++;
     if (_player_position[player_index] == _BOARD_SIZE - 1) {
         // Player reached last tile
         return true;
     }
+    */
     return false;
 }
 
 int Board::getPlayerPosition(int player_index) const {
     if (player_index >= 0 && player_index <= _player_count) {
-        return _player_position[player_index];
+        return _player_arr[player_index][0];
     }
     return -1;
 }
