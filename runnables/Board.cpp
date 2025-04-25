@@ -128,8 +128,7 @@ void Board::initializeTiles(int player_index, int boardType) {
 }
 
 
-// Board::Board()
-// {
+Board::Board() {
 //     _player_count = 1;
 
 //     // Initialize player position
@@ -137,7 +136,7 @@ void Board::initializeTiles(int player_index, int boardType) {
 
 //     // Initialize tiles
 //     initializeTiles();
-// }
+}
 
 //constructor
 Board::Board (int players[2][2], int player_count){
@@ -149,9 +148,8 @@ Board::Board (int players[2][2], int player_count){
 
     // Initialize player position
     for (int i = 0; i < _player_count; i++) {
-        //_player_position[i] = 0;
-        _player_arr[i][0] = 0; //_player_position[i];
-        //_players[i] = players[i];
+        _player_arr[i][0] = players[i][0];
+        _player_arr[i][1] = players[i][1];
     }
 
     // Initialize tiles
@@ -170,7 +168,8 @@ void Board::displayTile(int board_type, int pos) {
     // string space = "                                       ";
     string color = "";
 
-    // Template for displaying a tile: <line filler space> <color start> |<player symbol or blank space>| <reset color> <line filler space> <endl>
+    // Template for displaying a tile: <line filler space> <color start>
+    // |<player symbol or blank space>| <reset color> <line filler space> <endl>
 
     // Determine color to display
     if (_tiles[board_type][pos].color == 'R') {
@@ -193,48 +192,48 @@ void Board::displayTile(int board_type, int pos) {
         color = GREEN; //default to green if no color or weird color.
     }
 
+    //distinguishing player locations
     if (_player_arr[0][1] == board_type && _player_arr[1][1] == board_type) {
+        //check if both have the same board type.
         if (_player_arr[0][0] == pos && _player_arr[1][0] == pos) {
+            // First if: are they at the same location?
             cout << color << "|1 & 2|" << RESET;
         } else if (_player_arr[0][0] == pos && _player_arr[1][0] != pos) {
+            // Second if: is player 1 on the spot?
             cout << color << "| 1 |" << RESET;
-        } else if (_player_arr[1][0]== pos && _player_arr[0][0] != pos) {
+        } else if (_player_arr[1][0] == pos && _player_arr[0][0] != pos) {
+            // Third if: is player 2 on the spot?
             cout << color << "| 2 |" << RESET;
         } else {
+            // Else: just display the tile.
             cout << color << "|  |" << RESET;
         }
-    } else if (_player_arr[0][1] == board_type) {
-        if (_player_arr[0][0] == pos) {
+    } else if (_player_arr[0][1] == board_type || _player_arr[1][1] == board_type) {
+        //do they have different board types, basically
+        if (_player_arr[0][0] == pos && _player_arr[0][1] == board_type) {
+            // Is player 1 on the spot and board?
             cout << color << "| 1 |" << RESET;
-        } else if (_player_arr[1][0] == pos) {
+        } else if (_player_arr[1][0] == pos && _player_arr[1][1] == board_type) {
+            // Is player 2 on the spot and board?
             cout << color << "| 2 |" << RESET;
         } else {
+            // Else: just display the tile.
             cout << color << "|  |" << RESET;
         }
-    } else if (_player_arr[1][1] == board_type)
-    /*
-    for (int i = 0; i < _player_count; i++) {
-        if (isPlayerOnTile(_player_arr[i][0], pos)) {
-            isPlayerHere = true;
-            if (i >= 1 && isPlayerHere) {
-                isBothPlayers = true;
-            }
-        }
-    }
-
-    if (isPlayerHere == true) {
-        cout << color << "|" << (board_type + 1) << "|" << RESET;
     } else {
-        cout << color << "| |" << RESET;
+        // Else: just display the tile.
+        cout << color << "|  |" << RESET;
     }
-    */
 }
 
 void Board::displayTrack(int board_type) {
     for (int i = 0; i < _BOARD_SIZE; i++) {
         displayTile(board_type, i);
     }
-    cout << endl;
+    cout << endl << "Board type: " << board_type << " at player 1: "
+         << _player_arr[0][1] << " pos " << _player_arr[0][0] << " and player 2: "
+         << _player_arr[1][1] << " pos " << _player_arr[1][0] << endl;
+    cout << endl << "Board size: " << _BOARD_SIZE << endl;
 }
 
 void Board::displayBoard() {
@@ -257,13 +256,6 @@ bool Board::movePlayer(int player_index, int distance) {
         //player reached last tile
         return true;
     }
-    /*
-    _player_position[player_index]++;
-    if (_player_position[player_index] == _BOARD_SIZE - 1) {
-        // Player reached last tile
-        return true;
-    }
-    */
     return false;
 }
 

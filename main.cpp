@@ -18,16 +18,11 @@ using namespace std;
 int main () {
     srand(time(0));
 
-    //going to retheme, considering sci-fi or western theme...
+    Game theGame;
 
-    cout << "Welcome to..." << endl
-    <<
-"···································································\n" <<
-": _____ _           ___ _        _            __   _    _  __     :\n" <<
-":|_   _| |_  ___   / __(_)_ _ __| |___   ___ / _| | |  (_)/ _|___ :\n" <<
-":  | | | ' \\/ -_) | (__| | '_/ _| / -_) / _ \\  _| | |__| |  _/ -_):\n" <<
-":  |_| |_||_\\___|  \\___|_|_| \\__|_\\___| \\___/_|   |____|_|_| \\___|:\n" <<
-"···································································\n" << endl;
+    theGame.gameMasterInit();
+
+    //going to retheme, considering sci-fi or western theme...
 /*
     int spin = rand()%6;
     switch (spin) {
@@ -77,6 +72,7 @@ int main () {
 */
 
     //TEST BOARD:
+    /*
     int player_arr[2][2];
 
     for (int i = 0; i < 2; i++) {
@@ -91,6 +87,14 @@ int main () {
     Board myBoard(player_arr, 2);
     myBoard.initializeBoard();
     myBoard.displayBoard();
+
+    myBoard.movePlayer(0, 10);
+    myBoard.displayBoard();
+    myBoard.movePlayer(1,3);
+    myBoard.displayBoard();
+    */
+
+
     cout << "Thanks for playing! Congratulations, or better luck next time buddy." << endl;
 
     return 0;

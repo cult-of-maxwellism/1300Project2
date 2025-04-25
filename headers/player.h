@@ -17,6 +17,7 @@ class Player {
     int getPoints();
     int getLocation();
     int getPlayerNum();
+    int getBoardType();
     Advisor getPlayerAdvisor();
 
     //setters

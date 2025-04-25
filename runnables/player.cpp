@@ -86,6 +86,7 @@ int Player::getWisdom() { return _wisdom; }
 int Player::getPoints() { return _points; }
 int Player::getLocation() { return _location; }
 int Player::getPlayerNum() {return _playerNum; }
+int Player::getBoardType() { return _boardType; }
 Advisor Player::getPlayerAdvisor() { return playerAdvisor; }
 
 void Player::setAdvisor(Advisor chosen) {
@@ -113,7 +114,8 @@ void Player::changePoints(int newPoints) {
     }
 }
 void Player::move (int movement) {
-    //complicated move stuff
+    _location += movement;
+    
 }
 
 

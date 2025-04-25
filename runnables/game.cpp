@@ -38,6 +38,14 @@ Game::Game () {
     riddlePuller("../input_files/riddles.txt");
     cout << "Riddles good!" << endl;
     */
+    cout << "Welcome to..." << endl
+    <<
+"···································································\n" <<
+": _____ _           ___ _        _            __   _    _  __     :\n" <<
+":|_   _| |_  ___   / __(_)_ _ __| |___   ___ / _| | |  (_)/ _|___ :\n" <<
+":  | | | ' \\/ -_) | (__| | '_/ _| / -_) / _ \\  _| | |__| |  _/ -_):\n" <<
+":  |_| |_||_\\___|  \\___|_|_| \\__|_\\___| \\___/_|   |____|_|_| \\___|:\n" <<
+"···································································\n" << endl;
 
     int spin = rand()%2;
     switch (spinner()+(spin-1)) {
@@ -136,9 +144,16 @@ void Game::gameMasterInit () {
         playerNum--;
     }
 
-    //Board gameBoard(_players, 2);
-    //gameBoard.initializeBoard(0);
-    //gameBoard.displayBoard();
+    int players[2][2];
+
+    for (int i = 0; i < playerNum; i++) {
+        players[i][0] = 0;
+        players[i][1] = _players[i].getBoardType();
+    }
+
+    Board gameBoard(players, playerNum);
+    gameBoard.initializeBoard();
+    gameBoard.displayBoard();
 
     // this will split all the text files into the vectors used from here on out
     // additionally, it'll display the character array
@@ -171,10 +186,18 @@ void Game::gameMaster () {
 
 int Game::turn (int player) {
     Player currentPlayer = _players[player];
+    int move_distance = spinner();
 
     currentPlayer.menu();
 
-    currentPlayer.move(spinner());
+    currentPlayer.move(move_distance);
+    cout << "Moving " << move_distance << " distance." << endl;
+
+    if (player == 0) {
+        return 1;
+    } else {
+        return 0;
+    }
     
     return player;
 }

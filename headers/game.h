@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 
+#include "Board.h"
 #include"advisors.h"
 #include"characters.h"
 #include"events.h"
@@ -47,4 +48,5 @@ class Game {
     std::vector<Riddles> _riddles;
     //std::vector<Player> _players;
     Player _players[2];
+    Board theBoard;
 };
