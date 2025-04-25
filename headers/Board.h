@@ -13,7 +13,7 @@ private:
     static const int _MAX_PLAYERS = 2;
     int _player_count;
     //int _player_position[_MAX_PLAYERS];
-    int _player_arr [2][2]; // pos[x][0] is player position, pos[x][1] is board type
+    int _player_arr [2][2]; // pos[x][0] is player position, pos[0][x] is board type
     //Player _players[_MAX_PLAYERS];
     void displayTile(int player_index, int pos);
     void initializeTiles(int player_index, int boardType);
@@ -23,7 +23,7 @@ public:
     Board();
     Board(int players[2][2], int player_count);
     void displayTrack(int player_index);
-    void initializeBoard(int boardType);
+    void initializeBoard();
     void displayBoard();
     bool movePlayer(int player_index, int distance);
     int getPlayerPosition(int player_index) const;

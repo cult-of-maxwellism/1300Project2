@@ -16,7 +16,7 @@
 using namespace std;
 
 //init board
-void Board::initializeBoard(int boardType){
+void Board::initializeBoard(){
     for (int i = 0; i < 2; i++) {
         if (i==0) {
             initializeTiles(i, i); //Ensures unique distribution
@@ -156,7 +156,7 @@ Board::Board (int players[2][2], int player_count){
 
     // Initialize tiles
 
-    initializeBoard(0);
+    initializeBoard();
 }
 
 bool Board::isPlayerOnTile(int player_index, int pos) {
@@ -169,8 +169,6 @@ bool Board::isPlayerOnTile(int player_index, int pos) {
 void Board::displayTile(int board_type, int pos) {
     // string space = "                                       ";
     string color = "";
-    //bool isPlayerHere; = isPlayerOnTile(board_type, pos);
-    //bool isBothPlayers = false;
 
     // Template for displaying a tile: <line filler space> <color start> |<player symbol or blank space>| <reset color> <line filler space> <endl>
 
@@ -195,15 +193,25 @@ void Board::displayTile(int board_type, int pos) {
         color = GREEN; //default to green if no color or weird color.
     }
 
-    if (_player_arr[0][0] == pos && _player_arr[1][0] == pos) {
-        cout << color << "|1 & 2|" << RESET;
-    } else if (_player_arr[0][0] == pos && _player_arr[1][0] != pos) {
-        cout << color << "| 1 |" << RESET;
-    } else if (_player_arr[1][0]== pos && _player_arr[0][0] != pos) {
-        cout << color << "| 2 |" << RESET;
-    } else {
-        cout << color << "|  |" << RESET;
-    }
+    if (_player_arr[0][1] == board_type && _player_arr[1][1] == board_type) {
+        if (_player_arr[0][0] == pos && _player_arr[1][0] == pos) {
+            cout << color << "|1 & 2|" << RESET;
+        } else if (_player_arr[0][0] == pos && _player_arr[1][0] != pos) {
+            cout << color << "| 1 |" << RESET;
+        } else if (_player_arr[1][0]== pos && _player_arr[0][0] != pos) {
+            cout << color << "| 2 |" << RESET;
+        } else {
+            cout << color << "|  |" << RESET;
+        }
+    } else if (_player_arr[0][1] == board_type) {
+        if (_player_arr[0][0] == pos) {
+            cout << color << "| 1 |" << RESET;
+        } else if (_player_arr[1][0] == pos) {
+            cout << color << "| 2 |" << RESET;
+        } else {
+            cout << color << "|  |" << RESET;
+        }
+    } else if (_player_arr[1][1] == board_type)
     /*
     for (int i = 0; i < _player_count; i++) {
         if (isPlayerOnTile(_player_arr[i][0], pos)) {

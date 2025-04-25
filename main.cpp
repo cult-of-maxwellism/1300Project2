@@ -6,7 +6,7 @@
 //#include"headers/player.h"
 //#include "headers/Board.h"
 #include"headers/game.h"
-//#include"headers/Board.h"
+#include"headers/Board.h"
 
 using namespace std;
 
@@ -55,15 +55,17 @@ int main () {
     
     cout << endl;
 */
+
+/* TEST STUFF
     //Game myGame(2, "help.txt", "help.txt", "help.txt", "help.txt");
 
-    Game myGame;
+    //Game myGame;
 
     //Board gameBoard(2);
     //gameBoard.initializeBoard(0);
     //gameBoard.displayBoard();
 
-    myGame.gameMasterInit();
+    //myGame.gameMasterInit();
 
     // we're going to interact essentially entirey through gamemaster functions, I'll need to make those return player turns
     // gamemaster init
@@ -72,7 +74,23 @@ int main () {
         // playerTurn = game.gamemaster(playerTurn); - I think something like this? Need to make sure it flips btwn players
         // 
     // game.ending, then credits
+*/
 
+    //TEST BOARD:
+    int player_arr[2][2];
+
+    for (int i = 0; i < 2; i++) {
+        cout << "Player " << i << endl;
+        for (int j = 0; j < 2; j++) {
+            player_arr[i][j] = 0;
+            cout << player_arr[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    Board myBoard(player_arr, 2);
+    myBoard.initializeBoard();
+    myBoard.displayBoard();
     cout << "Thanks for playing! Congratulations, or better luck next time buddy." << endl;
 
     return 0;
