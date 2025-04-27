@@ -1,3 +1,4 @@
+#include <algorithm>
 #include<iostream>
 
 //header files:
@@ -18,47 +19,32 @@ using namespace std;
 int main () {
     srand(time(0));
 
-    Game theGame;
+    int players[2][2];
+    players[0][0] = 0;
+    players[0][1] = 0;
+    players[1][0] = 0;
+    players[1][1] = 0;
+    
 
-    theGame.gameMasterInit();
+    Board gameBoard(players, 2);
+    //gameBoard.initializeBoard(0);
+    gameBoard.displayBoard();
+    gameBoard.movePlayer(0,4);
+    gameBoard.displayBoard();
+    gameBoard.movePlayer(1, 5);
+    gameBoard.displayBoard();
 
     //going to retheme, considering sci-fi or western theme...
-/*
-    int spin = rand()%6;
-    switch (spin) {
-        case 0:
-        cout << "which is definitely legally distinct from The Lion King." << endl;
-        break;
-        case 1:
-        cout << "AAAAAAAAAAAAAAAAAAAAAAAAH SAVENYA BAGANICHI ALA" << endl;
-        break;
-        case 2:
-        cout << "I'm surrounded by idiots." << endl;
-        break;
-        case 3:
-        cout << "\"What\'s a motto?\" \"Nothing. What\'s a motto with you?\"" << endl;
-        break;
-        case 4:
-        cout << "Hakkuna Matata!" << endl;
-        break;
-        case 5:
-        cout << "Slimy... Yet Satisfying." << endl;
-        break;
-        default:
-        cout << "Your mom definitely approves." << endl;
-    }
-    
-    cout << endl;
-*/
 
 /* TEST STUFF
+
+    //Game theGame;
+
+    //theGame.gameMasterInit();
+
     //Game myGame(2, "help.txt", "help.txt", "help.txt", "help.txt");
 
     //Game myGame;
-
-    //Board gameBoard(2);
-    //gameBoard.initializeBoard(0);
-    //gameBoard.displayBoard();
 
     //myGame.gameMasterInit();
 

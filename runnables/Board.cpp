@@ -75,7 +75,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                     special_tiles++;
                     //oasis++;
                 }
-            } else if (green_count < 20) {
+            } else { //if (green_count < 20) {
                 temp.color = 'G';
                 green_count++;
             }
@@ -129,13 +129,13 @@ void Board::initializeTiles(int player_index, int boardType) {
 
 
 Board::Board() {
-//     _player_count = 1;
-
-//     // Initialize player position
-//     _player_position[0] = 0;
-
-//     // Initialize tiles
-//     initializeTiles();
+    _player_count = 1;
+    // Initialize player position
+    _player_arr[0][0] = 0;
+    //init player board
+    _player_arr[0][1] = 0;
+    // Initialize tiles
+    initializeTiles(0, _player_arr[0][1]);
 }
 
 //constructor

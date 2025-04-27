@@ -1,6 +1,7 @@
 #include <csignal>
 #include<iostream>
 #include<fstream>
+#include<sstream>
 
 #include"../headers/game.h"
 #include"../headers/spinner.h"
@@ -89,12 +90,12 @@ Game::Game(int playerNumber, string eventsFile, string advisorFile, string chara
 
 //Gameplay functions
 void Game::gameMasterInit () {
-    /*
-    advisorPuller("input_files/advisors.txt");
-    cout << "Advisors good!" << endl;
+    
+    //advisorPuller("input_files/advisors.txt");
+    //cout << "Advisors good!" << endl;
     characterPuller("input_files/characters.txt");
     cout << "Characters good!" << endl;
-    eventPuller("input_files/random_events.txt");
+    /*eventPuller("input_files/random_events.txt");
     cout << "Events good!" << endl;
     riddlePuller("input_files/riddles.txt");
     cout << "Riddles good!" << endl;
@@ -249,7 +250,7 @@ void Game::characterPuller(string filename) {
     Characters currentCharacter;
 
     while (getline(file_in, current_text, '|')) {
-        //if (current_text != "playerName" age|strength|stamina|wisdom|pridePoints) {
+        if (current_text != "playerName" || current_text != "age" || current_text != "strength" || current_text != "stamina" || current_text != "wisdom" || current_text != "pridePoints") {
             if (idx == 0) {
                 currentCharacter.name=current_text;
                 idx ++;
@@ -275,7 +276,7 @@ void Game::characterPuller(string filename) {
                 _characters.push_back(currentCharacter);
                 idx = 0;
             }
-        //}
+        }
     }
 }
 void Game::eventPuller(string filename) {
