@@ -19,6 +19,7 @@ class Game {
     //game function
     void gameMaster ();
     void gameMasterInit ();
+    void mainMenu();
     //turn function, incredibly important
     int turn(int player);
 
@@ -34,7 +35,6 @@ class Game {
     //Selector and menu functions
     Characters characterSelect();
     Advisor advisorSelect();
-    void mainMenu();
     void gameOver();
 
     //save, load, combat, and other stretch goals

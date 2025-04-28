@@ -75,27 +75,27 @@ Game::Game () {
     
     cout << endl;
 
-    mainMenu();
+    return;
 }
 
-//Gameplay functions
+//Gameplay functions - start game, manage game, run turns
 void Game::gameMasterInit () {
     cout << endl;
 
     int playerNum = 0, boardSelect=0;
-    while (playerNum > 2 || playerNum <= 0) {
-        cout << "Enter number of players (1 to 2)" << endl;
+    while (playerNum > 5 || playerNum <= 0) {
+        cout << "Enter number of players (up to 5)" << endl;
         cin >> playerNum;
-        if (playerNum != 1 && playerNum != 2) {
+        if (playerNum > 5) {
             cout << "please double check your maths." << endl;
         }
     }
 
     for (int i = 0; i < playerNum; i++) {
-        cout << "Player " << i+1 << "... let's intialize." << endl;
+        cout << "Player " << i+1 << "... let's get you started." << endl;
         cout << "First, tell me. Do you want to play normal (1) or easy (2)?" << endl;
         cin >> boardSelect;
-        
+
         boardSelect--;
 
         Characters temp_char = characterSelect();
@@ -118,141 +118,130 @@ void Game::gameMasterInit () {
         _players.push_back(temp);
     }
 
-    int players[2][2];
+    cout << "Player vector created, size " << _players.size() << endl;
 
-    for (int i = 0; i < 2; i++) {
-        players[i][0] = 0;
-        players[i][1] = _players[i].getBoardType();
-    }
-
-    Board gameBoard(players, playerNum);
-    _theBoard = gameBoard;
-    _theBoard.initializeBoard();
+    Board theBoard(_players);
+    //_theBoard.initializeBoard();
     _theBoard.displayBoard();
 
     gameMaster();
 }
-
 void Game::gameMaster () {
-    bool gameOver = false;
-    int which_turn = 0;
-    while (gameOver == false) {
-        which_turn = turn(which_turn);
-        if (which_turn == -1) {
-            gameOver = true;
-        }
-    }
-    // this will be most of the game. The basic logic loop is as follows:
-    // Player menu opened
-    // Once menu is closed, spinner to move
-    // Player movement sent to board
-    // Event management - event from tile
-        // Might build a combat system later?
-    // Event management - random event
-        // See above note
-    // Checks both player positions to see if they've both reached the end
-        // if so, will do a victory function
-    // 
-
-    //return player;
+    int player = 0;
+    while ((player=turn(player)) != -1);
+    gameOver();
+    mainMenu();
 }
 
 int Game::turn (int player) {
-    Player currentPlayer = _players[player];
+    Player currentPlayer = _players.at(player);
     int move_distance = spinner();
     int numPlayers = _players.size();
     char tileType;
     int userIn;
+    vector<int> winnerCount;
 
-    if (currentPlayer.getLocation() >= 51) {
-        if (numPlayers <= 1) {
-            gameOver();
+    for (int i = 0; i < numPlayers; i++) {
+        if (_players[i].getLocation() == 52) {
+            winnerCount.push_back(i);
+        }
+        if (player == winnerCount[i]) {
+            cout << "Player " << player+1 << " has already reached the end." << endl;
+            if (player == numPlayers-1) {
+                cout << "It's now player 1's turn." << endl;
+                return 0;
+            } else {
+                cout << "It's now player " << player+2 << "'s turn." << endl;
+                return player+1;
+            }
+        }
+    }
+    int winners = winnerCount.size();
+
+    if (winners == numPlayers) {
+        return -1;
+    }
+
+    currentPlayer.menu();
+
+    //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
+    tileType = _theBoard.movePlayer(player, move_distance);
+    cout << "Tile type is " << tileType << endl;
+    currentPlayer.move(move_distance);
+    cout << "Moving " << move_distance << " distance." << endl;
+
+    _theBoard.displayBoard();
+
+    cout << endl << "Landed on a ";
+    if (tileType == 'O') {
+        cout << "victory tile! Congrats!" << endl;
+        if (player == 0 && numPlayers <= 1) {
+            return -1;
         } else if (player == 0) {
             return 1;
         } else {
             return 0;
-        } 
-    } else if (_players[0].getLocation() >= 51 && _players[1].getLocation() >= 51) {
-        //check if both players have won
-        gameOver();
-    } else {
-
-        currentPlayer.menu();
-
-        //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
-        tileType = _theBoard.movePlayer(player, move_distance);
-        cout << "Tile type is " << tileType << endl;
-        currentPlayer.move(move_distance);
-        cout << "Moving " << move_distance << " distance." << endl;
-
-        _theBoard.displayBoard();
-
-        cout << "Landed on a ";
-        if (tileType == 'O') {
-            cout << "victory tile! Congrats!" << endl;
-            if (player == 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else if (tileType == 'G') {
-            cout << "grasslands tile. ";
-            if (spinner()%2 == 0) {
-                event(player);
-            } else {
-                cout << "You may rest this turn." << endl;
-            }
-        } else if (tileType == 'P') {
-            cout << "advisior tile. You feel greatly rested, and suddently quite wise." << endl;;
-            userIn = 0;
-
-            currentPlayer.changeWisdom(300);
-            currentPlayer.changeStamina(300);
-            currentPlayer.changeStrength(300);
-
-            while (userIn < 1 && userIn > 2) {
-                cout << "Do you wish to pick a new advisor? 1 for yes, 2 for no, 3 to see current advisor" << endl;
-                cin >> userIn;
-                if (userIn == 1) {
-                    currentPlayer.setAdvisor(advisorSelect());
-                    break;
-                } else if (userIn == 2) {
-                    break;                
-                } else {
-                    Advisor playerAdvisor = currentPlayer.getPlayerAdvisor();
-                    cout << "Advisor: " << playerAdvisor.name << " Ability: " << playerAdvisor.ability << endl << "Ability Description" << playerAdvisor.abilityDesc << endl;
-                }
-            }
-        } else if (tileType == 'U') {
-            riddleEncounter(player);
-        } else if (tileType == 'R') {
-            cout << "a graveyard tile. The sights, the smells, are terrible. You faint and wake up 10 tiles back." << endl;
-            currentPlayer.move(-10);
-            //This forces the player to move back 10 tiles and lose 100 Stamina, Strength, and Wisdom Points.
-            currentPlayer.changeWisdom(-100);
-            currentPlayer.changeStamina(-100);
-            currentPlayer.changeStrength(-100);
-        } else if (tileType == 'N') {
-            //The Hyenas are on the prowl! They drag you back to where you were last, and the journey comes at a cost.
-            // This returns the player to their previous position. In addition, the player’s Stamina Points decrease by 300 Points.
-            combat(player, 1);
-        } else if (tileType == 'B') {
-            cout << "an oasis. You feel quite rested." << endl;
-            //200 Stamina, Strength, and Wisdom Points.
-            currentPlayer.changeStamina(200);
-            currentPlayer.changeStrength(200);
-            currentPlayer.changeWisdom(100);
         }
-    }
+    } else if (tileType == 'G') {
+        cout << "grasslands tile. ";
+        if (spinner()%2 == 0) {
+            event(player);
+        } else {
+            cout << "You may rest this turn." << endl;
+        }
+    } else if (tileType == 'P') {
+        cout << "advisor tile. You feel greatly rested, and suddently quite wise. " << endl;;
+        userIn = 0;
 
-    cout << "Player " << player+1 << "'s turn is over." << endl;
-    if (player == 0 && numPlayers > 1) {
-        return 1;
-    } else {
-        return 0;
+        currentPlayer.changeWisdom(300);
+        currentPlayer.changeStamina(300);
+        currentPlayer.changeStrength(300);
+
+        while (userIn < 1 || userIn > 2) {
+            cout << "Do you wish to pick a new advisor? 1 for yes, 2 for no, 3 to see current advisor" << endl;
+            cin >> userIn;
+            if (userIn == 1) {
+                _advisors.push_back(currentPlayer.getPlayerAdvisor());
+                currentPlayer.setAdvisor(advisorSelect());
+                break;
+            } else if (userIn == 2) {
+                break;                
+            } else {
+                Advisor playerAdvisor = currentPlayer.getPlayerAdvisor();
+                cout << "Advisor: " << playerAdvisor.name << " Ability: " << playerAdvisor.ability << endl << "Ability Description" << playerAdvisor.abilityDesc << endl;
+            }
+        }
+    } else if (tileType == 'U') {
+        cout << "a riddle tile! Prepare to be bewitched! " << endl;
+        riddleEncounter(player);
+    } else if (tileType == 'R') {
+        cout << "a graveyard tile. The sights, the smells, are terrible. You faint and wake up 10 tiles back." << endl;
+        int movement = -10;
+        currentPlayer.move(movement);
+        //This forces the player to move back 10 tiles and lose 100 Stamina, Strength, and Wisdom Points.
+        currentPlayer.changeWisdom(-100);
+        currentPlayer.changeStamina(-100);
+        currentPlayer.changeStrength(-100);
+    } else if (tileType == 'N') {
+        cout << "hyena tile. Be careful! " << endl;
+        //The Hyenas are on the prowl! They drag you back to where you were last, and the journey comes at a cost.
+        // This returns the player to their previous position. In addition, the player’s Stamina Points decrease by 300 Points.
+        combat(player, 1);
+    } else if (tileType == 'B') {
+        cout << "an oasis. You feel quite rested." << endl;
+        //200 Stamina, Strength, and Wisdom Points.
+        currentPlayer.changeStamina(200);
+        currentPlayer.changeStrength(200);
+        currentPlayer.changeWisdom(100);
     }
-    
-    return player;
+    cout << "Player " << player+1 << "'s turn is over." << endl;
+    if (player == numPlayers-1) {
+        cout << "It's now player 1's turn." << endl;
+        return 0;
+    } else {
+        cout << "It's now player " << player+2 << "'s turn." << endl;
+        return player+1;
+    }
 }
 
 //initialization functions for advisor, character, event, riddle vectors
@@ -343,7 +332,6 @@ void Game::characterPuller(string filename) {
     }
     cout << "file loaded!" << endl;
 }
-//broken, need more complicated logic!
 void Game::eventPuller(string filename) {
     //this will pull in a file and feed the vector events with events from the file
     ifstream file_in(filename);
@@ -449,30 +437,30 @@ Characters Game::characterSelect() {
     }
 
     Characters chosen_char = _characters[userIn-1];
+    _characters.erase(_characters.begin()+(userIn-1));
 
     return chosen_char;
 }
-
 Advisor Game::advisorSelect() {
     cout << "Time to chose a advisor! We have the following avalible!" << endl;
 
     int vector_size = _advisors.size(), userIn = 0;
 
-    for (int i = 0; i < vector_size; i++) {
+    for (int i = 0; i < vector_size-1; i++) {
         cout << "Advisor " << i+1 << "    " << _advisors[i].name << endl
              << "Ability: " << _advisors[i].ability << endl
              << "Description: " << _advisors[i].abilityDesc << endl;
     }
-    while (userIn <= 0 || userIn >= vector_size) {
+    while (userIn <= 0 || userIn > vector_size) {
         cout << "Choose from advisors (1 to " << vector_size << ")" << endl;
         cin >> userIn;
     }
 
     Advisor chosen_advisor = _advisors[userIn-1];
+    _advisors.erase(_advisors.begin() + (userIn-1));
 
     return chosen_advisor;
 }
-
 void Game::mainMenu() {
     int userIn = 0;
     string filename = "../saved/",input;
@@ -510,6 +498,7 @@ void Game::mainMenu() {
     }
 }
 
+//event management
 void Game::event(int player) {
     int eventSize, eventChooser;
     Events chosenEvent;
@@ -550,7 +539,6 @@ void Game::event(int player) {
     }
     return;
 }
-
 void Game::riddleEncounter(int player) {
     string userAnswer = "";
     int riddleSize = _riddles.size();
@@ -560,32 +548,40 @@ void Game::riddleEncounter(int player) {
     cin >> userAnswer;
 
     string riddleAnswer = _riddles[riddleChooser].answer;
-    riddleAnswer += "\n";
+    //riddleAnswer += "\n";
 
     if (userAnswer == riddleAnswer) {
         cout << "Huzzah! You are correct!" << endl;
         _players[player].changeWisdom(500);
     } else {
-        cout << "Tragically, you have failed. The correct answer was " << _riddles[riddleChooser].answer << endl;
+        cout << "Tragically, you have failed. You entered '" << userAnswer << "' and the correct answer was '" << riddleAnswer << "'" << endl;
     }
 }
-
 void Game::gameOver() {
     cout << "Congrats on reaching the end of the game!" << endl;
-    ofstream record_Score("input_files/highscore.txt");
+    ofstream record_Score("input_files/highscore.txt", ios::app);
     int playerSize = _players.size();
 
     //year_month_day ymd{chrono::floor<chrono::days>(now)};
 
     for (int i = 0; i < playerSize; i++) {
-        cout << "Player " << i+1 << "'s score is: " << _players.at(i).getPoints() << endl;
-
-        record_Score << _players.at(i).getPlayerName() << "|" << _players.at(i).getPoints() << endl;
+        cout << "Player " << i+1 << "'s score is: " << _players.at(i).gameOver() << endl;
+        record_Score << _players.at(i).getPlayerName() << "|" << _players.at(i).gameOver() << endl;
     }
 
-    cout << "Thank you for playing! Taking you back to the main menu..." << endl;
+    if (playerSize >= 2) {
+        if (_players.at(0).gameOver() > _players.at(1).gameOver()) {
+            cout << "Congrats! Player 1 has won!" << endl;
+        } else if (_players.at(0).gameOver() < _players.at(1).gameOver()) {
+            cout << "Congrats! Player 2 has won!" << endl;
+        } else {
+            cout << "There must be some mistake, you appear to have tied. Play again to see who has the best luck!" << endl;
+        }
+    }
+    cout << "Thank you for playing! Printing highscores and taking you back to the main menu..." << endl;
+    highScore();
+    return;
 }
-
 void Game::highScore() {
     //brings in the highscore text
     ifstream recordScores("input_files/highscore.txt");
@@ -654,6 +650,14 @@ void Game::highScore() {
     return;
 }
 
+//work on later
+void Game::combat(int player, int scenario) {
+
+}
+
+//useless stuff for now, but it's basically a save game constructor:
+
+/*
 //the magic I will work on later!
 void Game::saveGame() {
     //this, when called, will print current game state to a text file
@@ -664,12 +668,8 @@ void Game::loadGame(string savedGame) {
     cout << "Tell me the name of your save file." << endl;
     cin >> filename;
 }
-void Game::combat(int player, int scenario) {
+*/
 
-}
-
-
-//useless stuff for now, but it's basically a save game constructor:
 /*
 Game::Game(int playerNumber, string eventsFile, string advisorFile, string characterFile, string riddleFile) {
     advisorPuller(advisorFile);

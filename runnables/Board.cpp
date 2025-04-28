@@ -1,7 +1,9 @@
 #include "../headers/Board.h"
-//#include "../headers/libraries.h"
+#include"../headers/board-player.h"
+#include <ostream>
 #include<stdlib.h>
 #include<iostream>
+#include <vector>
 
 #define RED "\033[48;2;230;10;10m" // R, hyena
 #define GREEN "\033[48;2;34;139;34m" // G, grassland /* Grassy Green (34,139,34) */
@@ -14,11 +16,11 @@
 #define RESET "\033[0m"
 
 //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
-
 using namespace std;
 
 //init board
 void Board::initializeBoard(){
+    cout << "Players size at init board " << _board_players.size() << endl;
     for (int i = 0; i < 2; i++) {
         if (i==0) {
             initializeTiles(i, i); //Ensures unique distribution
@@ -30,6 +32,7 @@ void Board::initializeBoard(){
 
 //creates each tile
 void Board::initializeTiles(int player_index, int boardType) {
+    cout << "Players size at init tiles " << _board_players.size() << endl;
     Tile temp;
     int green_count = 0, special_tiles = 0;
     int total_tiles = _BOARD_SIZE, tileType;
@@ -41,45 +44,47 @@ void Board::initializeTiles(int player_index, int boardType) {
                 temp.color = 'O'; //last block orange
             } else if (i == 0) {
                 temp.color = 'Y'; //starting block grey
-            } else if (green_count < 20 && rand() % (total_tiles-i) < 20 - green_count) {
-                temp.color = 'G'; //grasslands
-                green_count++;
-            } else if (tileType <= 4 && special_tiles < 30) {
-                temp.color = 'P'; // advisors will be pink
-                special_tiles++;
-            } else if (tileType >= 10 && tileType <= 15 && special_tiles < 30) {
-                temp.color = 'U'; // purple for challenge tile
-                special_tiles++;
-            } else if (i <= (total_tiles/2) && special_tiles < 30) {
-                tileType=rand()%20;
-                if (tileType >= 0 && tileType <= 10) {
-                    temp.color = 'R'; //red, for graveyards
+            } else {
+                if (green_count < 20 && rand() % (total_tiles-i) < 20 - green_count) {
+                    temp.color = 'G'; //grasslands
+                    green_count++;
+                } else if (tileType <= 4 && special_tiles < 30) {
+                    temp.color = 'P'; // advisors will be pink
                     special_tiles++;
-                } else if (tileType > 10 && tileType <= 15) {
-                    temp.color = 'N'; //brown, for hyenas
+                } else if (tileType >= 10 && tileType <= 15 && special_tiles < 30) {
+                    temp.color = 'U'; // purple for challenge tile
                     special_tiles++;
-                } else if ((tileType) == 18) {
-                    temp.color = 'B'; //blue for oasis
-                    special_tiles++;
+                } else if (i <= (total_tiles/2) && special_tiles < 30) {
+                    tileType=rand()%20;
+                    if (tileType >= 0 && tileType <= 10) {
+                        temp.color = 'R'; //red, for graveyards
+                        special_tiles++;
+                    } else if (tileType > 10 && tileType <= 15) {
+                        temp.color = 'N'; //brown, for hyenas
+                        special_tiles++;
+                    } else if ((tileType) == 18) {
+                        temp.color = 'B'; //blue for oasis
+                        special_tiles++;
+                    }
+                } else if (i > (total_tiles/2) && special_tiles < 30) {
+                    tileType=rand()%20;
+                    if (tileType >= 0 && tileType <= 3) {
+                        temp.color = 'R'; //red, for graveyards
+                        special_tiles++;
+                        //graveyard++;
+                    } else if (tileType > 4 && tileType <= 7) {
+                        temp.color = 'N'; //brown, for hyenas
+                        special_tiles++;
+                        //hyena++;
+                    } else if (tileType >= 10 && tileType <= 20) {
+                        temp.color = 'B'; //blue for oasis
+                        special_tiles++;
+                        //oasis++;
+                    }
+                } else if (green_count < 20) {
+                    temp.color = 'G';
+                    green_count++;
                 }
-            } else if (i > (total_tiles/2) && special_tiles < 30) {
-                tileType=rand()%20;
-                if (tileType >= 0 && tileType <= 3) {
-                    temp.color = 'R'; //red, for graveyards
-                    special_tiles++;
-                    //graveyard++;
-                } else if (tileType > 4 && tileType <= 7) {
-                    temp.color = 'N'; //brown, for hyenas
-                    special_tiles++;
-                    //hyena++;
-                } else if (tileType >= 10 && tileType <= 20) {
-                    temp.color = 'B'; //blue for oasis
-                    special_tiles++;
-                    //oasis++;
-                }
-            } else { //if (green_count < 20) {
-                temp.color = 'G';
-                green_count++;
             }
             _tiles[player_index][i] = temp;
         }
@@ -130,52 +135,38 @@ void Board::initializeTiles(int player_index, int boardType) {
 }
 
 Board::Board() {
-    /*
+    //default is for testing, mostly
     _player_count = 2;
-    // Initialize player position
-    for (int i = 0; i < 2; i++) {
-        //initialize player pos
-        _player_arr[i][0] = 0;
-        //initialize player board
-        _player_arr[i][1] = 0;
-    }
     // Initialize board
     initializeBoard();
-    */
 }
 
 //constructor
-Board::Board (int players[2][2], int player_count){
-    if (player_count > _MAX_PLAYERS) {
-        _player_count = _MAX_PLAYERS;
-    } else {
-        _player_count = player_count;
-    }
-
+Board::Board (vector<Player> players){
+    _player_count = players.size();
+    board_player temp;
     // Initialize player position
-    for (int i = 0; i < 2; i++) {
-        _player_arr[i][0] = 0;
-        if (player_count >= 2) {
-            _player_arr[i][1] = players[i][1];
-        } else {
-            _player_arr[0][1] = players[0][1];
-            _player_arr[1][1] = 3;
-        }
+    for (int i = 0; i < _player_count; i++) {
+        temp.position = players.at(i).getLocation();
+        temp.board_type = players.at(i).getBoardType();
+
+        _board_players.push_back(temp);
     }
 
+    cout << "Players size at Board::Board " << _board_players.size() << endl;
     // Initialize tiles
-
     initializeBoard();
 }
 
 bool Board::isPlayerOnTile(int player_index, int pos) {
-    if (_player_arr[player_index][0] == pos) {
+    if (_board_players.at(player_index).position == pos) {
         return true;
     }
     return false;
 }
 
 void Board::displayTile(int board_type, int pos) {
+    cout << "Players size at beginning of displayTile " << _board_players.size() << endl;
     // string space = "                                       ";
     string color = "";
 
@@ -203,22 +194,35 @@ void Board::displayTile(int board_type, int pos) {
         color = GREEN; //default to green if no color or weird color.
     }
 
+    cout << "players size at draw tiles: " << _board_players.size() << endl;
+    int playersOnTile = 0;
     //distinguishing player locations
-    if (_player_arr[0][1] == board_type && _player_arr[1][1] == board_type) {
-        //check if both have the same board type.
-        if (_player_arr[0][0] == pos && _player_arr[1][0] == pos) {
-            // First if: are they at the same location?
-            cout << color << "|1 & 2|" << RESET;
-        } else if (_player_arr[0][0] == pos && _player_arr[1][0] != pos) {
-            // Second if: is player 1 on the spot?
-            cout << color << "| 1 |" << RESET;
-        } else if (_player_arr[1][0] == pos && _player_arr[0][0] != pos) {
-            // Third if: is player 2 on the spot?
-            cout << color << "| 2 |" << RESET;
-        } else {
-            // Else: just display the tile.
-            cout << color << "|  |" << RESET;
+    for (int i = 0; i < _player_count; i++) {
+        cout << "looping " << i << " times!" << endl;
+        if (_board_players.at(i).board_type == board_type) {
+            _board_players.at(i).onTile = true;
+            playersOnTile++;
         }
+    }
+
+    cout << color << "|";
+    if (playersOnTile > 0) {
+        for (int i = 0; i < _player_count; i++) {
+            if (_board_players.at(i).onTile) {
+                cout << i+1;
+            }
+            if (i < playersOnTile) {
+                cout << " & ";
+            }
+        }
+        cout << "|" << RESET;
+    } else {
+        cout << color << "|  |" << RESET;
+    }
+
+    cout << " " << endl;
+
+    /*
     } else if (_player_arr[0][1] == board_type || _player_arr[1][1] == board_type) {
         //do they have different board types, basically
         if (_player_arr[0][0] == pos && _player_arr[0][1] == board_type) {
@@ -235,19 +239,18 @@ void Board::displayTile(int board_type, int pos) {
         // Else: just display the tile.
         cout << color << "|  |" << RESET;
     }
+    */
 }
 
 void Board::displayTrack(int board_type) {
+    cout << "Players size at displayTrack " << _board_players.size() << endl;
     for (int i = 0; i < _BOARD_SIZE; i++) {
         displayTile(board_type, i);
     }
-    cout << endl << "Player 1 board: "
-         << _player_arr[0][1] << " at pos " << _player_arr[0][0] << " and Player 2 board: "
-         << _player_arr[1][1] << " at pos " << _player_arr[1][0] << endl;
-    cout << endl << "Board size: " << _BOARD_SIZE << endl;
 }
 
 void Board::displayBoard() {
+    cout << "Players size at display board: " << _board_players.size() << endl;
     for (int i = 0; i < 2; i++) {
         if (i == 0) {
             cout << endl << "Normal Difficulty:" << endl;
@@ -260,25 +263,27 @@ void Board::displayBoard() {
 }
 
 char Board::movePlayer(int player_index, int distance) {
+    cout << "Players size at movePlayer" << _board_players.size() << endl;
     // Increment player position
-    _player_arr[player_index][0] += distance;
-    if (_player_arr[player_index][0] >= _BOARD_SIZE-1) {
-        _player_arr[player_index][0] = _BOARD_SIZE-1;
+    _board_players.at(player_index).position += distance ;
+    if (_board_players.at(player_index).position >= _BOARD_SIZE-1) {
+        _board_players.at(player_index).position = (_BOARD_SIZE-1);
+    } else if (_board_players.at(player_index).position < 0) {
+        _board_players.at(player_index).position = (0);
     }
     char tileType;
 
     //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
     //Return the character associated with the tile player landed on.
-    //if (_player_arr[player_index][0] == _BOARD_SIZE - 1) {
-        tileType = _tiles[_player_arr[player_index][1]][_player_arr[player_index][0]].color;
-    //}
+    tileType = _tiles[_board_players.at(player_index).board_type][_board_players.at(player_index).position].color;
 
     return tileType;
 }
 
-int Board::getPlayerPosition(int player_index) const {
+int Board::getPlayerPosition(int player_index) {
+    cout << "Players size at playerPosition " << _board_players.size() << endl;
     if (player_index >= 0 && player_index <= _player_count) {
-        return _player_arr[player_index][0];
+        return _board_players.at(player_index).position;
     }
     return -1;
 }

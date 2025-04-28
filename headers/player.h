@@ -19,6 +19,7 @@ class Player {
     int getLocation();
     int getPlayerNum();
     int getBoardType();
+    int gameOver();
     std::string getPlayerName();
     std::string getCharName();
     Advisor getPlayerAdvisor();
@@ -29,6 +30,7 @@ class Player {
     void changeStrength (int newStr);
     void changeWisdom(int newWis);
     void changePoints(int newPoints);
+    void setLocation (int location);
 
     //technically a setter, move function
     void move (int movement);

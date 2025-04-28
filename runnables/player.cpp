@@ -23,6 +23,7 @@ Player::Player() {
     _wisdom = 0;
     _stamina = 0;
     _location = 0;
+    _boardType = 0;
 
 }
 
@@ -160,8 +161,9 @@ Advisor Player::getPlayerAdvisor() { return _playerAdvisor; }
 string Player::getPlayerName() { return _playerName; }
 
 void Player::setAdvisor(Advisor chosen) {
-    //this is gonna do a little compare to make sure it won't just put a blank advisor in, then it'll set advisor.
+    _playerAdvisor = chosen;
 }
+void Player::setLocation(int location) { _location = location; }
 
 void Player::changeStamina (int stamChange) {
     int newStam = _strength+stamChange;
@@ -195,7 +197,10 @@ void Player::move (int movement) {
     _location += movement;    
 }
 
-
-int Player::inputChecker (string) {
-    return 2;
+int Player::gameOver() {
+    int totalPoints = _points;
+    totalPoints += (_wisdom*10);
+    totalPoints += (_strength*10);
+    totalPoints += (_stamina*10);
+    return totalPoints;
 }
