@@ -3,15 +3,17 @@
 #include<stdlib.h>
 #include<iostream>
 
-#define RED "\033[48;2;230;10;10m"
-#define GREEN "\033[48;2;34;139;34m"  /* Grassy Green (34,139,34) */
-#define BLUE "\033[48;2;10;10;230m"
-#define PINK "\033[48;2;255;105;180m"
-#define BROWN "\033[48;2;139;69;19m"
-#define PURPLE "\033[48;2;128;0;128m"
-#define ORANGE "\033[48;2;230;115;0m" /* Orange (230,115,0) */
-#define GREY "\033[48;2;128;128;128m" /* Grey (128,128,128) */
+#define RED "\033[48;2;230;10;10m" // R, hyena
+#define GREEN "\033[48;2;34;139;34m" // G, grassland /* Grassy Green (34,139,34) */
+#define BLUE "\033[48;2;10;10;230m" // B, oasis
+#define PINK "\033[48;2;255;105;180m" // P, advisor
+#define BROWN "\033[48;2;139;69;19m" // N, hyena
+#define PURPLE "\033[48;2;128;0;128m" // U, challenge
+#define ORANGE "\033[48;2;230;115;0m" /* Orange (230,115,0), end */
+#define GREY "\033[48;2;128;128;128m" /* Grey (128,128,128), start */
 #define RESET "\033[0m"
+
+//Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
 
 using namespace std;
 
@@ -127,15 +129,19 @@ void Board::initializeTiles(int player_index, int boardType) {
     }
 }
 
-
 Board::Board() {
-    _player_count = 1;
+    /*
+    _player_count = 2;
     // Initialize player position
-    _player_arr[0][0] = 0;
-    //init player board
-    _player_arr[0][1] = 0;
-    // Initialize tiles
-    initializeTiles(0, _player_arr[0][1]);
+    for (int i = 0; i < 2; i++) {
+        //initialize player pos
+        _player_arr[i][0] = 0;
+        //initialize player board
+        _player_arr[i][1] = 0;
+    }
+    // Initialize board
+    initializeBoard();
+    */
 }
 
 //constructor
@@ -147,9 +153,14 @@ Board::Board (int players[2][2], int player_count){
     }
 
     // Initialize player position
-    for (int i = 0; i < _player_count; i++) {
-        _player_arr[i][0] = players[i][0];
-        _player_arr[i][1] = players[i][1];
+    for (int i = 0; i < 2; i++) {
+        _player_arr[i][0] = 0;
+        if (player_count >= 2) {
+            _player_arr[i][1] = players[i][1];
+        } else {
+            _player_arr[0][1] = players[0][1];
+            _player_arr[1][1] = 3;
+        }
     }
 
     // Initialize tiles
@@ -230,33 +241,39 @@ void Board::displayTrack(int board_type) {
     for (int i = 0; i < _BOARD_SIZE; i++) {
         displayTile(board_type, i);
     }
-    cout << endl << "Board type: " << board_type << " at player 1: "
-         << _player_arr[0][1] << " pos " << _player_arr[0][0] << " and player 2: "
-         << _player_arr[1][1] << " pos " << _player_arr[1][0] << endl;
+    cout << endl << "Player 1 board: "
+         << _player_arr[0][1] << " at pos " << _player_arr[0][0] << " and Player 2 board: "
+         << _player_arr[1][1] << " at pos " << _player_arr[1][0] << endl;
     cout << endl << "Board size: " << _BOARD_SIZE << endl;
 }
 
 void Board::displayBoard() {
     for (int i = 0; i < 2; i++) {
         if (i == 0) {
-            cout << "Normal Difficulty:" << endl;
+            cout << endl << "Normal Difficulty:" << endl;
         } else {
-            cout << "Easy Difficulty:" << endl;
+            cout << endl << "Easy Difficulty:" << endl;
         }
         displayTrack(i);
         cout << endl;  // Add an extra line between the two lanes
     }
 }
 
-bool Board::movePlayer(int player_index, int distance) {
+char Board::movePlayer(int player_index, int distance) {
     // Increment player position
     _player_arr[player_index][0] += distance;
-
-    if (_player_arr[player_index][0] == _BOARD_SIZE - 1) {
-        //player reached last tile
-        return true;
+    if (_player_arr[player_index][0] >= _BOARD_SIZE-1) {
+        _player_arr[player_index][0] = _BOARD_SIZE-1;
     }
-    return false;
+    char tileType;
+
+    //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
+    //Return the character associated with the tile player landed on.
+    //if (_player_arr[player_index][0] == _BOARD_SIZE - 1) {
+        tileType = _tiles[_player_arr[player_index][1]][_player_arr[player_index][0]].color;
+    //}
+
+    return tileType;
 }
 
 int Board::getPlayerPosition(int player_index) const {

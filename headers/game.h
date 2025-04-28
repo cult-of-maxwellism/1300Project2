@@ -14,13 +14,15 @@ class Game {
     public:
     //constructor
     Game();
-    Game(int playerNumber, std::string eventsFile, std::string advisorFile, std::string characterFile, std::string riddleFile);
+    //Game(int playerNumber, std::string eventsFile, std::string advisorFile, std::string characterFile, std::string riddleFile);
 
     //game function
     void gameMaster ();
     void gameMasterInit ();
     //turn function, incredibly important
     int turn(int player);
+
+    void highScore();
 
     private:
     //vector builders for each struct
@@ -30,23 +32,24 @@ class Game {
     void riddlePuller(std::string filename);
 
     //Selector and menu functions
-    void characterSelect();
-    void advisorSelect();
+    Characters characterSelect();
+    Advisor advisorSelect();
     void mainMenu();
     void gameOver();
-    void highScore();
 
     //save, load, combat, and other stretch goals
     void saveGame();
     void loadGame(std::string savedGame);
     void combat(int player, int scenario);
-
+    void riddleEncounter(int player);
+    void event(int player);
     //variables
     std::vector<Characters> _characters;
     std::vector<Advisor> _advisors;
-    std::vector<Events> _events;
+    std::vector<Events> _norm_events;
+    std::vector<Events> _easy_events;
     std::vector<Riddles> _riddles;
     //std::vector<Player> _players;
-    Player _players[2];
-    Board theBoard;
+    std::vector<Player> _players;
+    Board _theBoard;
 };

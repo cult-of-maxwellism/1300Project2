@@ -1,9 +1,4 @@
 Description | PathType (0 = cubTraining; 1 = straight to the pride lands) | Advisor (0 = none; 1 = Rafiki (invisibility); 2 = Nala (night vision); 3 = Sarabi (energy manipulation); 4 = Zazu (weather control); 5 = Sarafina (super speed)) | PridePoints (lose or gain)
-
-
-
-//Example of Negative Events with Advisor Protection:
-
 Desert storm sweeps through the territory|1|4|-500
 Fatigue from intense training with pride warriors|0|3|-200
 Challenging night watch duty under pitch-black conditions|1|2|-400
@@ -24,9 +19,6 @@ Dehydration due to unexpected heatwave|1|4|-300
 Quick escape required from a sudden flood|0|5|-500
 Got lost while tracking prey at dusk|1|2|-400
 Struggled in a difficult chase through dense terrain|0|5|-300
-
-//Example of Positive Events:
-
 Extra energy from bountiful season|1|0|800
 Observed a rare natural phenomenon|0|0|600
 Gained wisdom from observing Rafiki’s rituals|1|0|500

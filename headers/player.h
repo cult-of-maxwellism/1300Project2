@@ -1,5 +1,6 @@
 #pragma once
-
+#include <string>
+#include<vector>
 #include"advisors.h"
 #include"characters.h"
 
@@ -18,6 +19,8 @@ class Player {
     int getLocation();
     int getPlayerNum();
     int getBoardType();
+    std::string getPlayerName();
+    std::string getCharName();
     Advisor getPlayerAdvisor();
 
     //setters
@@ -40,7 +43,9 @@ class Player {
     int _points;
     int _location;
     int _boardType;
+    std::string charName;
 
-    Advisor playerAdvisor;
-    std::string playerName;
+    Advisor _playerAdvisor;
+    std::string _playerName;
+    Characters _player_character;
 };

@@ -1,4 +1,5 @@
 #include <algorithm>
+
 #include<iostream>
 
 //header files:
@@ -19,13 +20,19 @@ using namespace std;
 int main () {
     srand(time(0));
 
+    /*
     int players[2][2];
     players[0][0] = 0;
     players[0][1] = 0;
     players[1][0] = 0;
     players[1][1] = 0;
-    
+    */
 
+    Game myGame;
+
+    //myGame.highScore();
+    
+    /*
     Board gameBoard(players, 2);
     //gameBoard.initializeBoard(0);
     gameBoard.displayBoard();
@@ -33,6 +40,7 @@ int main () {
     gameBoard.displayBoard();
     gameBoard.movePlayer(1, 5);
     gameBoard.displayBoard();
+    */
 
     //going to retheme, considering sci-fi or western theme...
 

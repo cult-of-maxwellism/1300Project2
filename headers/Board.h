@@ -25,6 +25,6 @@ public:
     void displayTrack(int player_index);
     void initializeBoard();
     void displayBoard();
-    bool movePlayer(int player_index, int distance);
+    char movePlayer(int player_index, int distance);
     int getPlayerPosition(int player_index) const;
 };
