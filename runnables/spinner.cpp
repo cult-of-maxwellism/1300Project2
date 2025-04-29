@@ -2,7 +2,6 @@
 
 #include<cstdlib>
 #include<ctime>
-#include<iostream>
 
 using namespace std;
 
@@ -13,6 +12,5 @@ int spinner () {
         seeded = true;
     }
     int result = rand()%6;
-    cout << "You rolled a " << result+1 << endl;
     return result+1;
 }

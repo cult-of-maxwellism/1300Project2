@@ -1,34 +1,35 @@
 #include<csignal>
+#include <cstdlib>
 #include<iostream>
 #include<fstream>
 #include<ostream>
 #include<sstream>
 #include<string>
-#include<chrono>
 
 #include"../headers/game.h"
 #include"../headers/spinner.h"
 #include"../headers/Board.h"
 #include"../headers/score.h"
+#include"../headers/input_san.h"
+#include"../headers/enemy.h"
 
 using namespace std;
-/* this is it, the functions where everything happens!
+/* The Game function is the internal & main function.
 
-BLUF:
+Currently, I have functions to:
+- split the text files up into vectors of characters, advisors, riddles, and events.
 
-In here, I want to have a function which tracks the location of all players and does the board display function, and
-functions to split the text files up into vectors of characters, advisors, riddles, and events.
+Variables, I have:
+- vectors of players, characters, advisors, riddles, and events.
 
-Variable-wise, I want vectors of players, characters, advisors, riddles, and events.
+Initialization starts in constructor, and then we hit the menu, which activates GameMaster Init.
 
-I then want two functions: gamemasterInit and gamemaster. GMI will do the printing of a character array, some flavor
-text, and the "select character" and "select path" menu.
+Turns follow this proess: gamemaster activates turn, which returns the next player int, which gamemaster feeds back into turn,
+until it recieves -1 and does game-over
 
-Gamemaster will essentially act as a turn, returning the value of the next player's turn (i.e. if player 1 just played, it'll
-return the value for Player 2). In theory, GM should open the player menu, move the player, handle events (both tile and random),
-possibly integrate a combat system, then hand it off to the second player.
+Turn does event management, movement, and so forth. If I had more time, Turn would have been broken up into two or three more functions, likely/
 
-Finally, I want a endgame function. This displays stats between the two players and tells us who's the winner.
+GameOver (should) take the point totals of all characters and add them to 
 */
 
 //constructors
@@ -81,11 +82,10 @@ Game::Game () {
 //Gameplay functions - start game, manage game, run turns
 void Game::gameMasterInit () {
     cout << endl;
-
     int playerNum = 0, boardSelect=0;
     while (playerNum > 5 || playerNum <= 0) {
         cout << "Enter number of players (up to 5)" << endl;
-        cin >> playerNum;
+        playerNum = input_san();
         if (playerNum > 5) {
             cout << "please double check your maths." << endl;
         }
@@ -93,8 +93,8 @@ void Game::gameMasterInit () {
 
     for (int i = 0; i < playerNum; i++) {
         cout << "Player " << i+1 << "... let's get you started." << endl;
-        cout << "First, tell me. Do you want to play normal (1) or easy (2)?" << endl;
-        cin >> boardSelect;
+        cout << "Select difficulty: normal (1) or easy (2)?" << endl;
+        boardSelect = input_san();
 
         boardSelect--;
 
@@ -118,14 +118,14 @@ void Game::gameMasterInit () {
         _players.push_back(temp);
     }
 
-    cout << "Player vector created, size " << _players.size() << endl;
-
-    Board theBoard(_players);
-    //_theBoard.initializeBoard();
+    Board newBoard(_players);
+    newBoard.initializeBoard();
+    _theBoard = newBoard;
     _theBoard.displayBoard();
-
+    _theBoard.getVectorSize();
     gameMaster();
 }
+
 void Game::gameMaster () {
     int player = 0;
     while ((player=turn(player)) != -1);
@@ -134,29 +134,12 @@ void Game::gameMaster () {
 }
 
 int Game::turn (int player) {
+    //declaring variables...
     Player currentPlayer = _players.at(player);
-    int move_distance = spinner();
     int numPlayers = _players.size();
     char tileType;
     int userIn;
-    vector<int> winnerCount;
-
-    for (int i = 0; i < numPlayers; i++) {
-        if (_players[i].getLocation() == 52) {
-            winnerCount.push_back(i);
-        }
-        if (player == winnerCount[i]) {
-            cout << "Player " << player+1 << " has already reached the end." << endl;
-            if (player == numPlayers-1) {
-                cout << "It's now player 1's turn." << endl;
-                return 0;
-            } else {
-                cout << "It's now player " << player+2 << "'s turn." << endl;
-                return player+1;
-            }
-        }
-    }
-    int winners = winnerCount.size();
+    int winners = 0;
 
     if (winners == numPlayers) {
         return -1;
@@ -164,24 +147,32 @@ int Game::turn (int player) {
 
     currentPlayer.menu();
 
-    //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
+    int move_distance = spinner();
+
+    //We're doing all the move stuff here...
     tileType = _theBoard.movePlayer(player, move_distance);
     cout << "Tile type is " << tileType << endl;
     currentPlayer.move(move_distance);
-    cout << "Moving " << move_distance << " distance." << endl;
-
     _theBoard.displayBoard();
 
+
+    //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)
     cout << endl << "Landed on a ";
     if (tileType == 'O') {
         cout << "victory tile! Congrats!" << endl;
-        if (player == 0 && numPlayers <= 1) {
+        winners++;
+        if (numPlayers == 1) {
             return -1;
-        } else if (player == 0) {
-            return 1;
-        } else {
+        } else if (winners >= numPlayers) {
+            return -1;
+        } else if (player == numPlayers-1) {
+            cout << "It's now player 1's turn." << endl;
             return 0;
+        } else {
+            cout << "It's now player " << player+2 << "'s turn." << endl;
+            return player+1;
         }
+
     } else if (tileType == 'G') {
         cout << "grasslands tile. ";
         if (spinner()%2 == 0) {
@@ -189,6 +180,7 @@ int Game::turn (int player) {
         } else {
             cout << "You may rest this turn." << endl;
         }
+
     } else if (tileType == 'P') {
         cout << "advisor tile. You feel greatly rested, and suddently quite wise. " << endl;;
         userIn = 0;
@@ -199,6 +191,7 @@ int Game::turn (int player) {
 
         while (userIn < 1 || userIn > 2) {
             cout << "Do you wish to pick a new advisor? 1 for yes, 2 for no, 3 to see current advisor" << endl;
+            cin.clear();
             cin >> userIn;
             if (userIn == 1) {
                 _advisors.push_back(currentPlayer.getPlayerAdvisor());
@@ -218,6 +211,7 @@ int Game::turn (int player) {
         cout << "a graveyard tile. The sights, the smells, are terrible. You faint and wake up 10 tiles back." << endl;
         int movement = -10;
         currentPlayer.move(movement);
+        _theBoard.movePlayer(player, movement);
         //This forces the player to move back 10 tiles and lose 100 Stamina, Strength, and Wisdom Points.
         currentPlayer.changeWisdom(-100);
         currentPlayer.changeStamina(-100);
@@ -425,70 +419,63 @@ void Game::riddlePuller(string filename) {
 //menu functions, selectors, similar
 Characters Game::characterSelect() {
     cout << "Time to chose a character! We have the following avalible!" << endl;
-    int vector_size = _characters.size(), userIn = 0;
+    int vector_size = _characters.size(), userChoose = 0;
+    string userIn = "";
     for (int i = 0; i < vector_size; i++) {
         cout << "Character " << i+1 << "    " <<  _characters[i].name << ", age " << _characters[i].age << endl
              << "Strength: " << _characters[i].strength << "  Stamina: " << _characters[i].stamina << "  Wisdom: " << _characters[i].wisdom << endl;
         cout << "-------" << endl;
     }
-    while (userIn <= 0 || userIn > vector_size) {
+    while (userChoose <= 0 || userChoose > vector_size) {
         cout << "Choose from characters 1 to " << vector_size << endl;
-        cin >> userIn;
+        userChoose = input_san();
     }
 
-    Characters chosen_char = _characters[userIn-1];
-    _characters.erase(_characters.begin()+(userIn-1));
+    Characters chosen_char = _characters[userChoose-1];
+    _characters.erase(_characters.begin()+(userChoose-1));
 
     return chosen_char;
 }
 Advisor Game::advisorSelect() {
     cout << "Time to chose a advisor! We have the following avalible!" << endl;
 
-    int vector_size = _advisors.size(), userIn = 0;
+    int vector_size = _advisors.size(), userChoose = 0;
 
     for (int i = 0; i < vector_size-1; i++) {
         cout << "Advisor " << i+1 << "    " << _advisors[i].name << endl
              << "Ability: " << _advisors[i].ability << endl
              << "Description: " << _advisors[i].abilityDesc << endl;
     }
-    while (userIn <= 0 || userIn > vector_size) {
+    while (userChoose <= 0 || userChoose > vector_size) {
         cout << "Choose from advisors (1 to " << vector_size << ")" << endl;
-        cin >> userIn;
+        userChoose = input_san();
     }
 
-    Advisor chosen_advisor = _advisors[userIn-1];
-    _advisors.erase(_advisors.begin() + (userIn-1));
+    Advisor chosen_advisor = _advisors[userChoose-1];
+    _advisors.erase(_advisors.begin() + (userChoose-1));
 
     return chosen_advisor;
 }
 void Game::mainMenu() {
-    int userIn = 0;
+    string userIn = "";
+    int userNum = 0;
     string filename = "../saved/",input;
-    while (userIn != 4) {
+    while (userNum != 3) {
         cout << "Menu options (select by number):" << endl
              << "1. New Game" << endl
-             << "2. Load Game" << endl
-             << "3. High Score" << endl
-             << "4. Exit Game" << endl;
-        cin >> userIn;
+             << "2. High Score" << endl
+             << "3. Exit Game" << endl;
+        userNum = input_san();
 
-        switch (userIn) {
+        switch (userNum) {
             case 1:
             gameMasterInit();
             break;
             case 2:
             cout << "Under Construction!" << endl;
-            /*Enter saved game name:" << endl;
-            cin >> input;
-            filename += input;
-            filename += ".save";
-            loadGame(filename);
-            */
-            break;
-            case 3:
             highScore();
             break;
-            case 4:
+            case 3:
             cout << "Thanks for playing!" << endl;
             break;
             default:
@@ -497,7 +484,6 @@ void Game::mainMenu() {
         }
     }
 }
-
 //event management
 void Game::event(int player) {
     int eventSize, eventChooser;
@@ -530,11 +516,11 @@ void Game::event(int player) {
             cout << "Sarafina uses her power of super speed to save you!" << endl;
         } else {
             _players[player].changePoints(chosenEvent.points);
-            cout << "You lose " << chosenEvent.points << " points!";
+            cout << "You lose " << chosenEvent.points << " points!" << endl;
         }
     } else {
         //good things
-        cout << "You gain " << chosenEvent.points << " points!";
+        cout << "You gain " << chosenEvent.points << " points!" << endl;
         _players[player].changePoints(chosenEvent.points);
     }
     return;
@@ -545,6 +531,7 @@ void Game::riddleEncounter(int player) {
     int riddleChooser = rand()%riddleSize;
 
     cout << "You must solve a riddle to continue!" << endl << _riddles[riddleChooser].riddle << endl;
+    cin.clear();
     cin >> userAnswer;
 
     string riddleAnswer = _riddles[riddleChooser].answer;
@@ -649,74 +636,97 @@ void Game::highScore() {
 
     return;
 }
-
-//work on later
 void Game::combat(int player, int scenario) {
+    int attackTurn = 0, defenseTurn = 0, healthChange = 0;
 
-}
+    //battle stats!
+    int playerAttack, playerDefense, playerHealth;
+    Enemy badguy;
+    playerAttack = (_players.at(player).getStrength())/100;
+    playerDefense = (_players.at(player).getWisdom())/100;
+    playerHealth = (_players.at(player).getStamina())/100;
 
-//useless stuff for now, but it's basically a save game constructor:
+    badguy.attack = (rand() % ((playerAttack+2) + 1 - (playerAttack-3)) + (playerAttack-3));
+    badguy.defense = (rand() % ((playerDefense+2) + 1 - (playerDefense-3)) + playerAttack-3);
+    badguy.health = (rand()% (5 - 1) + 1);
 
-/*
-//the magic I will work on later!
-void Game::saveGame() {
-    //this, when called, will print current game state to a text file
-}
-void Game::loadGame(string savedGame) {
-    //this will take a given savegame, add .txt to it, find it, and load it.
-    string filename = "";
-    cout << "Tell me the name of your save file." << endl;
-    cin >> filename;
-}
-*/
-
-/*
-Game::Game(int playerNumber, string eventsFile, string advisorFile, string characterFile, string riddleFile) {
-    advisorPuller(advisorFile);
-    eventPuller(eventsFile);
-    characterPuller(characterFile);
-    riddlePuller(riddleFile);
-    //all of these beautiful things, declared!
-    //_players;
-    int _player_arr[2][2];
-
-    cout << "Welcome to..." << endl
-    <<
-"···································································\n" <<
-": _____ _           ___ _        _            __   _    _  __     :\n" <<
-":|_   _| |_  ___   / __(_)_ _ __| |___   ___ / _| | |  (_)/ _|___ :\n" <<
-":  | | | ' \\/ -_) | (__| | '_/ _| / -_) / _ \\  _| | |__| |  _/ -_):\n" <<
-":  |_| |_||_\\___|  \\___|_|_| \\__|_\\___| \\___/_|   |____|_|_| \\___|:\n" <<
-"···································································\n" << endl;
-
-    int spin = rand()%2;
-    switch (spinner()+(spin-1)) {
-        case 0:
-        cout << "which is definitely legally distinct from The Lion King." << endl;
-        break;
-        case 1:
-        cout << "AAAAAAAAAAAAAAAAAAAAAAAAH SAVENYA BAGANICHI ALA" << endl;
-        break;
-        case 2:
-        cout << "I'm surrounded by idiots." << endl;
-        break;
-        case 3:
-        cout << "\"What\'s a motto?\" \"Nothing. What\'s a motto with you?\"" << endl;
-        break;
-        case 4:
-        cout << "Hakkuna Matata!" << endl;
-        break;
-        case 5:
-        cout << "Slimy... Yet Satisfying." << endl;
-        break;
-        default:
-        cout << "Your mom definitely approves." << endl;
+    if (badguy.attack <= 0) {
+        badguy.attack = 1;
     }
-    
-    cout << endl;
+    if (badguy.defense <= 0) {
+        badguy.defense = 0;
+    }
 
-    gameMasterInit();
+    while (badguy.health > 0 && playerHealth > 0) {
+        cout << "Combat encounter!" << endl
+             << "         Hyena:        Player:" << endl
+             << "ATK    : " << badguy.attack <<  "        " << playerAttack << endl
+             << "DEF    : " << badguy.defense << "        " << playerDefense << endl
+             << "Health : " << badguy.health << "        " << playerHealth << endl;
 
+        cout << "Attack (1), Sacrifice Advisor (2), or Die (3):" << endl;
+        int menu = input_san();
+
+        if (menu == 1) {
+            cout << "You rolled a ";
+            for (int i = 0; i < playerAttack; i++) {
+                attackTurn += spinner();
+            }
+            cout << attackTurn << "!" << endl;
+            cout << "The hyena rolled a ";
+            for (int i = 0; i < badguy.defense; i++) {
+                defenseTurn += spinner();
+            }
+            cout << defenseTurn << " on defense, and took ";
+            healthChange = defenseTurn-attackTurn;
+            if (healthChange < 0) {
+                cout << -healthChange << " damage!";
+                badguy.health += healthChange;
+            } else {
+                cout << " no damage!" << endl;
+            }
+            //now for the defensive side!
+            cout << "The hyena attacks!" << endl;
+            attackTurn = 0;
+            defenseTurn = 0;
+            healthChange = 0;
+
+            cout << "The hyena rolled a ";
+            for (int i = 0; i < badguy.attack; i++) {
+                attackTurn += spinner();
+            }
+            cout << attackTurn << "!" << endl;
+            cout << "You rolled a ";
+            for (int i = 0; i < playerDefense; i++) {
+                defenseTurn += spinner();
+            }
+            cout << defenseTurn << " for defense, and took ";
+            healthChange = defenseTurn-attackTurn;
+            if (healthChange < 0) {
+                cout << -healthChange << " damage!";
+                playerHealth += healthChange;
+            } else {
+                cout << " no damage!" << endl;
+            }
+        } else if (menu == 2) {
+            if (_players.at(player).getPlayerAdvisor().name == "") {
+                cout << "Not a option!" << endl;
+            } else {
+                badguy.health = 0;
+                Advisor blankAdvisor;
+                _players.at(player).setAdvisor(blankAdvisor);
+            }
+        } else if (menu == 3) {
+            playerHealth = 0;
+        }
+    }
+
+    if (badguy.health <= 0) {
+        cout << "You must have won this encounter... you may stay on this tile." << endl;
+    } else if (playerHealth <= 0) {
+        cout << "You have lost this encounter, prepare to move back." << endl;
+        _players.at(player).move(-10);
+        _theBoard.movePlayer(player, -10);
+    }
     return;
 }
-*/

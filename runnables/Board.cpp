@@ -20,7 +20,7 @@ using namespace std;
 
 //init board
 void Board::initializeBoard(){
-    cout << "Players size at init board " << _board_players.size() << endl;
+    //cout << "Players size at init board " << _board_players.size() << endl;
     for (int i = 0; i < 2; i++) {
         if (i==0) {
             initializeTiles(i, i); //Ensures unique distribution
@@ -32,7 +32,7 @@ void Board::initializeBoard(){
 
 //creates each tile
 void Board::initializeTiles(int player_index, int boardType) {
-    cout << "Players size at init tiles " << _board_players.size() << endl;
+    //cout << "Players size at init tiles " << _board_players.size() << endl;
     Tile temp;
     int green_count = 0, special_tiles = 0;
     int total_tiles = _BOARD_SIZE, tileType;
@@ -153,20 +153,13 @@ Board::Board (vector<Player> players){
         _board_players.push_back(temp);
     }
 
-    cout << "Players size at Board::Board " << _board_players.size() << endl;
+    //cout << "Players size at Board::Board " << _board_players.size() << endl;
     // Initialize tiles
     initializeBoard();
 }
 
-bool Board::isPlayerOnTile(int player_index, int pos) {
-    if (_board_players.at(player_index).position == pos) {
-        return true;
-    }
-    return false;
-}
-
-void Board::displayTile(int board_type, int pos) {
-    cout << "Players size at beginning of displayTile " << _board_players.size() << endl;
+void Board::displayTile(int board_type, int pos, vector<board_player> players) {
+    //cout << "Players size at beginning of displayTile " << players.size() << endl;
     // string space = "                                       ";
     string color = "";
 
@@ -194,72 +187,46 @@ void Board::displayTile(int board_type, int pos) {
         color = GREEN; //default to green if no color or weird color.
     }
 
-    cout << "players size at draw tiles: " << _board_players.size() << endl;
-    int playersOnTile = 0;
-    //distinguishing player locations
-    for (int i = 0; i < _player_count; i++) {
-        cout << "looping " << i << " times!" << endl;
-        if (_board_players.at(i).board_type == board_type) {
-            _board_players.at(i).onTile = true;
-            playersOnTile++;
-        }
-    }
-
+    //cout << "players size at draw tiles: " << players.size() << endl;
     cout << color << "|";
-    if (playersOnTile > 0) {
-        for (int i = 0; i < _player_count; i++) {
-            if (_board_players.at(i).onTile) {
-                cout << i+1;
-            }
-            if (i < playersOnTile) {
-                cout << " & ";
-            }
+
+    bool any = false;
+    for (int i = 0; i < _player_count; ++i) {
+        if (players[i].board_type == board_type && players[i].position == pos) {
+            if (any) cout << " & ";
+            cout << i + 1;
+            any = true;
         }
-        cout << "|" << RESET;
-    } else {
-        cout << color << "|  |" << RESET;
     }
 
-    cout << " " << endl;
-
-    /*
-    } else if (_player_arr[0][1] == board_type || _player_arr[1][1] == board_type) {
-        //do they have different board types, basically
-        if (_player_arr[0][0] == pos && _player_arr[0][1] == board_type) {
-            // Is player 1 on the spot and board?
-            cout << color << "| 1 |" << RESET;
-        } else if (_player_arr[1][0] == pos && _player_arr[1][1] == board_type) {
-            // Is player 2 on the spot and board?
-            cout << color << "| 2 |" << RESET;
-        } else {
-            // Else: just display the tile.
-            cout << color << "|  |" << RESET;
-        }
-    } else {
-        // Else: just display the tile.
-        cout << color << "|  |" << RESET;
+    if (!any) {
+        cout << "  ";
     }
-    */
+
+    cout << "|" << RESET;
 }
 
-void Board::displayTrack(int board_type) {
-    cout << "Players size at displayTrack " << _board_players.size() << endl;
+void Board::displayTrack(int board_type, vector<board_player> players) {
+    //cout << "Players size at displayTrack " << players.size() << endl;
     for (int i = 0; i < _BOARD_SIZE; i++) {
-        displayTile(board_type, i);
+        displayTile(board_type, i, players);
     }
 }
 
 void Board::displayBoard() {
-    cout << "Players size at display board: " << _board_players.size() << endl;
+    //cout << "Players size at display board: " << _board_players.size() << endl;
     for (int i = 0; i < 2; i++) {
         if (i == 0) {
             cout << endl << "Normal Difficulty:" << endl;
         } else {
             cout << endl << "Easy Difficulty:" << endl;
         }
-        displayTrack(i);
+        displayTrack(i, _board_players);
         cout << endl;  // Add an extra line between the two lanes
     }
+}
+void Board::getVectorSize () {
+    cout << "Board Players is " << _board_players.size() << endl;
 }
 
 char Board::movePlayer(int player_index, int distance) {
@@ -281,7 +248,7 @@ char Board::movePlayer(int player_index, int distance) {
 }
 
 int Board::getPlayerPosition(int player_index) {
-    cout << "Players size at playerPosition " << _board_players.size() << endl;
+    //cout << "Players size at playerPosition " << _board_players.size() << endl;
     if (player_index >= 0 && player_index <= _player_count) {
         return _board_players.at(player_index).position;
     }

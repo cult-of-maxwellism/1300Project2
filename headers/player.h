@@ -37,6 +37,8 @@ class Player {
 
     private:
     int inputChecker(std::string); //internal function to ensure string is just numbers
+
+    //variables for the player class
     int _playerNum;
     int _age;
     int _stamina;
@@ -47,6 +49,9 @@ class Player {
     int _boardType;
     std::string charName;
 
+    void pointConvert();
+
+    //and here's the little things each player holds.
     Advisor _playerAdvisor;
     std::string _playerName;
     Characters _player_character;

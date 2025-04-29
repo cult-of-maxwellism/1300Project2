@@ -9,23 +9,32 @@
 
 class Board {
 private:
+    //tile info
     static const int _BOARD_SIZE = 52;
     Tile _tiles[2][_BOARD_SIZE]; //_tiles[0] is the board for normal, _tiles[1] is the board for easy
-    //static const int _MAX_PLAYERS = 2;
+    
+    //player information
     int _player_count;
-    //int _player_position[_MAX_PLAYERS];
-    //int _player_arr [2][2]; // pos[x][0] is player position, pos[0][x] is board type
     std::vector<board_player> _board_players;
-    void displayTile(int player_index, int pos);
+
+    //display work
+    void displayTile(int player_index, int pos, std::vector<board_player> players);
     void initializeTiles(int player_index, int boardType);
-    bool isPlayerOnTile(int player_index, int pos);
 
 public:
+    //constructors
     Board();
     Board(std::vector<Player> players);
-    void displayTrack(int player_index);
+    
+    //interactable display info
+    void displayTrack(int player_index, std::vector<board_player> players);
     void initializeBoard();
     void displayBoard();
+
+    //playerpos information
     char movePlayer(int player_index, int distance);
     int getPlayerPosition(int player_index);
+
+    //debugging cout tool
+    void getVectorSize();
 };
