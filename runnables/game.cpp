@@ -122,7 +122,7 @@ void Game::gameMasterInit () {
     newBoard.initializeBoard();
     _theBoard = newBoard;
     _theBoard.displayBoard();
-    _theBoard.getVectorSize();
+    //_theBoard.getVectorSize();
     gameMaster();
 }
 
@@ -555,7 +555,7 @@ void Game::gameOver() {
         cout << "Player " << i+1 << "'s score is: " << _players.at(i).gameOver() << endl;
         record_Score << _players.at(i).getPlayerName() << "|" << _players.at(i).gameOver() << endl;
     }
-
+//adjust for new player as vector
     if (playerSize >= 2) {
         if (_players.at(0).gameOver() > _players.at(1).gameOver()) {
             cout << "Congrats! Player 1 has won!" << endl;
