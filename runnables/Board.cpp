@@ -1,9 +1,9 @@
 #include "../headers/Board.h"
 #include"../headers/board-player.h"
-#include <ostream>
+#include<ostream>
 #include<stdlib.h>
 #include<iostream>
-#include <vector>
+#include<vector>
 
 #define RED "\033[48;2;230;10;10m" // R, hyena
 #define GREEN "\033[48;2;34;139;34m" // G, grassland /* Grassy Green (34,139,34) */
