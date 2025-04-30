@@ -1,5 +1,5 @@
 #include<iostream>
-#include <ostream>
+#include<ostream>
 
 #include"../headers/player.h"
 #include"../headers/input_san.h"

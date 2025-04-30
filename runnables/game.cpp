@@ -1,5 +1,5 @@
 #include<csignal>
-#include <cstdlib>
+#include<cstdlib>
 #include<iostream>
 #include<fstream>
 #include<ostream>

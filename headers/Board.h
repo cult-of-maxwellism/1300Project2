@@ -2,9 +2,9 @@
 
 #include<vector>
 
-#include "Tile.h"
-#include "player.h"
-#include "board-player.h"
+#include"Tile.h"
+#include"player.h"
+#include"board-player.h"
 //the logic in this needs to be reworked for balance, I'm also considering changing a lot on how initializeTiles works.
 
 class Board {

@@ -1,4 +1,4 @@
-#include "../headers/Board.h"
+#include"../headers/Board.h"
 #include"../headers/board-player.h"
 #include<ostream>
 #include<stdlib.h>
