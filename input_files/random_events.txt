@@ -1,51 +1,61 @@
-Description | PathType (0 = cubTraining; 1 = straight to the pride lands) | Advisor (0 = none; 1 = Rafiki (invisibility); 2 = Nala (night vision); 3 = Sarabi (energy manipulation); 4 = Zazu (weather control); 5 = Sarafina (super speed)) | PridePoints (lose or gain)
-Desert storm sweeps through the territory|1|4|-500
-Fatigue from intense training with pride warriors|0|3|-200
-Challenging night watch duty under pitch-black conditions|1|2|-400
-Encounter with a rival pride’s ambush|0|3|-700
-Severe drought affecting water sources|1|4|-800
-Minor injury during hunting training|0|3|-300
-Dangerous predator attacks at night|1|2|-1000
-Difficult hunting season during a new moon|0|2|-500
-Failed to secure food during a swift hunt|1|5|-300
-Harsh winds disrupt hunting grounds|0|4|-800
-Encounter with a deadly sandstorm|1|4|-600
-Lost a valuable resource in enemy territory|0|3|-800
-Missed seasonal gathering due to night travel hazards|1|2|-400
-Emergency rescue mission at night|0|1|-600
-Encountered a cunning ambush|1|1|-700
-Injured during a high-energy confrontation|0|3|-500
-Dehydration due to unexpected heatwave|1|4|-300
-Quick escape required from a sudden flood|0|5|-500
-Got lost while tracking prey at dusk|1|2|-400
-Struggled in a difficult chase through dense terrain|0|5|-300
-Extra energy from bountiful season|1|0|800
-Observed a rare natural phenomenon|0|0|600
-Gained wisdom from observing Rafiki’s rituals|1|0|500
-Celebrated successful hunting expedition|0|0|500
-Guided by a friendly herd of elephants through rough terrain|1|0|700
-Bonding session with pride members strengthens unity|0|0|300
-Victory in territorial boundary dispute|1|0|1000
-Assisted young cubs in training and gained respect|0|0|400
-Restorative gathering at Pride Rock|1|0|500
-Gained insight from Rafiki's stories about the Circle of Life|0|0|300
-Strategic support from Zazu during a storm|1|0|400
-Shared hunting tactics with pride; improved success rate|0|0|600
-Guided by Nala’s night vision during a moonlit hunt|1|0|500
-Gained Sarabi’s strength training tips, increasing endurance|0|0|400
-Safe journey home through Sarafina’s speed|1|0|500
-Supported pride morale during a challenging season|0|0|600
-Alerted to danger by bird allies, avoiding a trap|1|0|600
-Helped an injured elder with Sarabi’s energy healing|0|0|700
-Insightful guidance from Rafiki avoids potential pitfalls|1|0|500
-Celebrated pride unity with a successful ritual|0|0|700
-Received valuable advice from Zazu on weather patterns|1|0|200
-Protected by Nala’s night vision from a nighttime threat|0|0|600
-Assisted in resolving a pride dispute peacefully|1|0|400
-Wisdom gained from a rare encounter with Rafiki|0|0|300
-Received a blessing of strength from Sarabi|1|0|500
-Honored by pride elders for bravery|0|0|800
-Encountered a helpful owl guiding the way at night|1|0|500
-Mentored by seasoned warriors on advanced tactics|0|0|600
-Bonded with pride members during a successful hunt|1|0|700
-Helped restore pride lands with Sarafina’s speed|0|0|500
+Description|PathType (0 = Training; 1 = Direct Mission)|Advisor (0 = None; 1 = Zara (cloaking); 2 = Naya (enhanced vision); 3 = Sable (energy conduit); 4 = Vega (atmospheric manipulation); 5 = Cyra (hypervelocity); 6 = Orion (gravity manipulation); 7 = Lyra (teleportation); 8 = Caelus (AI interfacing); 9 = Juno (stealth hacking))|PurityPoints (lose or gain)
+Solar storm disrupts communication systems|1|4|-500
+Exhaustion after intensive training in ship repairs|0|3|-200
+Navigating an asteroid field with limited visibility|1|2|-400
+Ambushed by space pirates while salvaging a wreck|0|3|-700
+Radiation leak threatens the ship’s systems|1|4|-800
+Minor injury during EVA (extravehicular activity)|0|3|-300
+Alien hostile encounters during night exploration|1|2|-1000
+Resource scarcity on an uninhabited moon|0|2|-500
+Failed to secure critical equipment during a salvage run|1|5|-300
+Unpredictable solar winds disrupt navigation systems|0|4|-800
+Encountered a devastating cosmic storm|1|4|-600
+Lost valuable salvage in hostile space territory|0|3|-800
+Missed a vital rendezvous due to low visibility at night|1|2|-400
+Emergency repair mission during an energy crisis|0|1|-600
+Surrounded by a pirate fleet, caught in an ambush|1|1|-700
+Injured during a high-energy battle in a debris field|0|3|-500
+Dehydration after a heatwave on a desert planet|1|4|-300
+Quick escape required due to a collapsing space station|0|5|-500
+Lost communication signals while exploring a hostile moon|1|2|-400
+Struggled to repair damaged ship systems in a volatile atmosphere|0|5|-300
+Boosted morale after a highly productive salvage mission|1|0|800
+Discovered a rare cosmic phenomenon during exploration|0|0|600
+Gained knowledge from observing Zara’s stealth tactics|1|0|500
+Celebrated a successful salvage of a derelict spaceship|0|0|500
+Assisted by a fleet of AI drones through hazardous space terrain|1|0|700
+Strengthened team unity during a critical space mission|0|0|300
+Victory in securing a valuable wreck from hostile territory|1|0|1000
+Helped train young salvage cadets and earned their respect|0|0|400
+Restored power to a damaged ship during a critical repair|1|0|500
+Gained insights from Zara’s stealth techniques on avoiding detection|0|0|300
+Strategic support from Cyra during a high-speed evasion|1|0|400
+Shared space salvage tactics with the crew, increasing efficiency|0|0|600
+Guided by Naya’s enhanced vision during a night-time space recovery|1|0|500
+Gained Sable’s knowledge on energy regulation, improving system efficiency|0|0|400
+Successfully navigated through an asteroid field with Cyra’s speed|1|0|500
+Supported crew morale during a tough mission in a hostile zone|0|0|600
+Alerted to an incoming pirate fleet by Vega’s atmospheric manipulation|1|0|600
+Assisted an injured crew member with Sable’s energy healing|0|0|700
+Gained tactical insights from Zara’s covert operations, avoiding detection|1|0|500
+Celebrated a major salvage win during a successful recovery mission|0|0|700
+Received guidance from Naya on avoiding hidden dangers during a night mission|1|0|200
+Protected by Naya’s vision from a potential ambush during salvage|0|0|600
+Helped resolve a dispute within the salvage crew peacefully|1|0|400
+Wisdom gained from a rare encounter with Zara’s strategies|0|0|300
+Received a blessing of power from Sable’s energy manipulation|1|0|500
+Honored by the team for bravery in the face of danger|0|0|800
+Encountered a helpful AI guiding the way during an emergency|1|0|500
+Mentored new recruits in advanced salvage tactics|0|0|600
+Bonded with the crew during a successful high-risk space recovery|1|0|700
+Assisted in repairing a vital system with Cyra’s speed|0|0|500
+Received strategic advice from Juno’s stealth hacking during a high-risk mission|1|0|400
+Helped restore critical ship systems with Orion’s gravity manipulation|1|0|500
+Successfully bypassed enemy systems with Lyra’s teleportation abilities|1|0|600
+Navigated through enemy-controlled space with Caelus’ AI support|0|0|700
+Leveraged Vega’s atmospheric expertise to avoid hostile planetary zones|1|0|500
+Assisted an injured crew member with Sable’s energy healing|0|0|700
+Successfully infiltrated a high-security station with Juno’s hacking skills|0|0|600
+Bonded with the crew during a successful salvage operation thanks to Cyra’s speed|1|0|700
+Recovered a rare alien artifact with help from Lyra’s teleportation|0|0|500
+Restored damaged ship systems with the help of Sable’s energy manipulation|1|0|600

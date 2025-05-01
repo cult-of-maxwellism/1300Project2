@@ -20,6 +20,7 @@ class Player {
     int getPlayerNum();
     int getBoardType();
     int gameOver();
+    bool getWinCond();
     std::string getPlayerName();
     std::string getCharName();
     Advisor getPlayerAdvisor();
@@ -31,6 +32,7 @@ class Player {
     void changeWisdom(int newWis);
     void changePoints(int newPoints);
     void setLocation (int location);
+    void setWinCond(bool won);
 
     //technically a setter, move function
     void move (int movement);
@@ -48,6 +50,7 @@ class Player {
     int _location;
     int _boardType;
     std::string charName;
+    bool _hasWon;
 
     void pointConvert();
 

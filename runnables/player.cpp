@@ -113,12 +113,14 @@ int Player::getPlayerNum() {return _playerNum; }
 int Player::getBoardType() { return _boardType; }
 Advisor Player::getPlayerAdvisor() { return _playerAdvisor; }
 string Player::getPlayerName() { return _playerName; }
+bool Player::getWinCond() { return _hasWon; }
 
 //setters
 void Player::setLocation(int location) { _location = location; }
 void Player::setAdvisor(Advisor chosen) {
     _playerAdvisor = chosen;
 }
+void Player::setWinCond(bool won) { _hasWon = won; }
 
 //changers
 void Player::changeStamina (int stamChange) {

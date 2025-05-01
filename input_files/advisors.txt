@@ -1,6 +1,11 @@
-name|ability|description
-Rafiki|Invisibility|The ability to become un-seen
-Nala|Night Vision|The ability to see clearly in darkness
-Sarabi|Energy Manipulation|The ability to shape and control the properties of energy
-Zazu|Weather Control|The ability to influence and manipulate weather patterns
-Sarafina|Super Speed|The ability to run 4x faster than the maximum speed of lions
+num|name|ability|description
+0|Zara|Cloaking|The ability to activate an advanced cloaking device that renders the ship invisible to sensors
+1|Naya|Enhanced Vision|The ability to see through the darkness of space, detecting objects in low-light or zero-visibility conditions
+2|Sable|Energy Conduit|The ability to manipulate energy flows in systems, optimizing power to critical ship functions
+3|Vega|Atmospheric Manipulation|The ability to control and modify ship systems to stabilize environments, such as temperature and pressure
+4|Cyra|Hypervelocity|The ability to execute extremely fast maneuvers, allowing the ship to move at speeds far beyond normal capabilities
+5|Orion|Tactical Combat|The ability to assess and strategize ship defense, preparing for hostile encounters during salvage operations
+6|Cassiopeia|Nanotech Repair|The ability to deploy nanobots for quick and efficient repairs on damaged ship systems or hulls
+7|Eris|Gravitational Manipulation|The ability to control gravity within localized fields, useful for adjusting the ship's weight or navigating debris fields
+8|Apollo|AI Coordination|The ability to interface with and manage multiple AI systems, coordinating repairs, data analysis, and ship functions simultaneously
+9|Nova|Resource Scavenging|The ability to locate and extract valuable resources from abandoned or destroyed ships, optimizing salvage operations

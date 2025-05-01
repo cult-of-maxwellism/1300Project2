@@ -7,4 +7,5 @@ struct Characters {
     int strength;
     int wisdom;
     int points;
+    std::string bio;
 };

@@ -43,6 +43,17 @@ class Game {
     void combat(int player, int scenario);
     void riddleEncounter(int player);
     void event(int player);
+
+    //aesthetics generator:
+    //Tile type chars are: O (last block), Y (first block), G (space), P (consultant), U (challenge), R (graveyard), N (hyena), B (oasis)cout << "at idx 5";
+    //void artwork(int type);
+    void spaceArt();
+    //void consultArt();
+    //void graveArt();
+    void attackArt(int scenario);
+    //void oasisArt();
+    // /void victoryArt();
+
     //variables
     std::vector<Characters> _characters;
     std::vector<Advisor> _advisors;

@@ -1,6 +1,9 @@
-playerName|age|strength|stamina|wisdom|purityPoints
-Apollo|5|500|500|1000|20000
-Mane|8|900|600|600|20000
-Elsa|12|900|700|500|20000
-Zuri|7|600|500|900|20000
-Roary|18|1000|500|500|20000
+playerName|age|strength|stamina|wisdom|purityPoints|bio
+Kaelan|32|950|850|900|25000|Kaelan is a battle-hardened captain with years of experience leading salvage crews in hostile environments. His sharp strategic mind and combat experience make him invaluable when navigating dangerous missions.
+Rhea|29|600|800|950|24000|Rhea is an expert engineer, skilled in repairing and repurposing old ship parts. Her calm demeanor and unparalleled knowledge of starship mechanics make her a cornerstone of the salvage team.
+Tess|26|700|750|900|23000|Tess is a resourceful scavenger with an uncanny ability to find valuable materials in the wreckage of space battles. Despite her quiet nature, she’s highly resourceful and always gets the job done.
+Astra|35|850|600|950|26000|Astra is a brilliant scientist who specializes in nanotechnology and ship repairs. Her work with nanobots has saved the crew countless times when a ship system fails mid-mission.
+Lyra|28|800|850|850|24500|Lyra has a deep connection to the crew, often being the mediator in stressful situations. A master of atmospheric manipulation, her role is vital in maintaining the integrity of life support systems in hostile environments.
+Caden|30|900|700|850|25000|Caden is a fearless salvage pilot known for her skill at navigating through dense asteroid fields and abandoned ships. Her adaptability and quick reflexes make her one of the best in high-risk recovery missions.
+Briar|34|950|600|900|25500|Briar is a former military strategist who now focuses on tactical operations for salvage crews. Her experience in hostile territories allows her to plan for every potential threat during space salvage operations.
+Juno|33|800|750|950|24500|Juno is an expert in AI systems, often working alongside Kaelan to keep the ship's systems running smoothly. His deep understanding of data analysis and system optimization ensures the crew is always ahead of the curve.
