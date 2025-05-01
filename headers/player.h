@@ -8,7 +8,8 @@ class Player {
     public:
     //constructor
     Player();
-    Player(int num, int age, int stam, int str, int wis, int points, int board);
+    Player(int num, Characters playerChar, int board);
+    //Player(int num, int age, int stam, int str, int wis, int points, int board); / for custom chars...
     //function
     void menu();
     //getter
@@ -17,6 +18,7 @@ class Player {
     int getWisdom();
     int getPoints();
     int getLocation();
+    int getSalvage();
     int getPlayerNum();
     int getBoardType();
     int gameOver();
@@ -31,6 +33,7 @@ class Player {
     void changeStrength (int newStr);
     void changeWisdom(int newWis);
     void changePoints(int newPoints);
+    void changeSalvage (int salvChange);
     void setLocation (int location);
     void setWinCond(bool won);
 
@@ -49,7 +52,8 @@ class Player {
     int _points;
     int _location;
     int _boardType;
-    std::string charName;
+    int _salvageAmount;
+    //std::string _charName;
     bool _hasWon;
 
     void pointConvert();

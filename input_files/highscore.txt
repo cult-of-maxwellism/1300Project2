@@ -1,4 +1,1 @@
-Strength|52900
-Humility|55700
-abcdefghijklmnopqrst|15515151
-Dave|57300
+Name|Character|Score

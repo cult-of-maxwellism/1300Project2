@@ -25,13 +25,14 @@ Player::Player() {
     _boardType = 0;
 }
 
-Player::Player(int num, int age, int stam, int str, int wis, int points, int board) {
+Player::Player(int num, Characters playerChar, int board) {
     _playerNum = num;
-    _age = age;
-    _stamina = stam;
-    _strength = str;
-    _wisdom = wis;
-    _points = points;
+
+    _age = playerChar.age;
+    _stamina = playerChar.stamina;
+    _strength = playerChar.strength;
+    _wisdom = playerChar.wisdom;
+    _points = playerChar.points;
     _location = 0;
     _boardType = board;
 
@@ -46,7 +47,7 @@ Player::Player(int num, int age, int stam, int str, int wis, int points, int boa
 //interactive function - menu
 void Player::menu () {
     int userInput=0, chooser = 0;
-
+    cout << "+----+----+----+----+----+----+----+" << endl;
     while (userInput != 5) {
         cout << _playerName << "'s Menu: Select an option to continue..." << endl
             << "1. Check Player Progress (1)" << endl
@@ -55,6 +56,7 @@ void Player::menu () {
             << "4. Review your Advisor (4)" << endl
             << "5. Move Forward (5)" << endl << endl
             << "Please choose an option using the corresponding number:" << endl;
+        cout << "----+----" << endl;
 
         //I sanatize input here
         userInput = input_san();
@@ -62,15 +64,18 @@ void Player::menu () {
         switch (userInput) {
             case 1:
             pointConvert();
+            cout << endl << "----+----+----" << endl;
             break;
 
             case 2:
-            cout << "Player " << _playerName << " character stats:" << endl
-            << "Age:      " << _age << endl
-            << "Stamina:  " << _stamina << endl
-            << "Strength: " << _strength << endl
-            << "Wisdom:   " << _wisdom << endl
-            << "Points:   " << _points << endl;
+            cout<< "Player " << _playerName << " character stats:" << endl
+                << "Age:      " << _age << endl
+                << "Stamina:  " << _stamina << endl
+                << "Strength: " << _strength << endl
+                << "Wisdom:   " << _wisdom << endl
+                << "Salvage:  " << _salvageAmount << endl
+                << "Points:   " << _points << endl;
+                cout << endl << "----+----+----" << endl;
             break;
 
             case 3:
@@ -79,7 +84,8 @@ void Player::menu () {
             case 4:
             cout << "Player " << _playerName << "'s advisor is " << _playerAdvisor.name << endl
                  << "Ability: " << _playerAdvisor.ability << endl
-                 << "Description: " << _playerAdvisor.abilityDesc << endl
+                 << "Description: " << _playerAdvisor.abilityDesc << endl;
+                 cout << "----+----+----" << endl
                  << "Do you want to fire your advisor, making them unable to work for any player for the rest of the game (1 for yes, 2 for no)?" << endl;
                 while (chooser != 1 && chooser != 2) {
                     chooser = input_san();
@@ -88,16 +94,18 @@ void Player::menu () {
                     Advisor blankAdvisor;
                     _playerAdvisor = blankAdvisor;
                 } else {
-                    cout << "Probably smart: they tend to both have families and superpowers." << endl;
+                    cout << "Probably smart: they tend to both have families and a special set of (very dangerous) skills." << endl;
                 }
+                cout << "----+----+----" << endl;
             break;
 
             case 5:
-            cout << "Moving!" << endl;
+            cout << "Moving at your command." << endl;
             break;
 
             default:
             cout << "User input not recognized, please choose from the menu!" << endl;
+            cout << "----+----+----" << endl;
 
         }
     }
@@ -109,10 +117,12 @@ int Player::getStrength() { return _strength; }
 int Player::getWisdom() { return _wisdom; }
 int Player::getPoints() { return _points; }
 int Player::getLocation() { return _location; }
+int Player::getSalvage() { return _salvageAmount; }
 int Player::getPlayerNum() {return _playerNum; }
 int Player::getBoardType() { return _boardType; }
 Advisor Player::getPlayerAdvisor() { return _playerAdvisor; }
 string Player::getPlayerName() { return _playerName; }
+string Player::getCharName() { return _player_character.name; }
 bool Player::getWinCond() { return _hasWon; }
 
 //setters
@@ -145,6 +155,17 @@ void Player::changeWisdom(int wisChange) {
         _wisdom = 100;
     } else {
         _wisdom = newWis;
+    }
+}
+void Player::changeSalvage(int salvChange) {
+    if (salvChange == 0) {
+        _salvageAmount = 0;
+    } else {
+        _salvageAmount += salvChange;
+    }
+
+    if (_salvageAmount < 0) {
+        _salvageAmount = 0;
     }
 }
 void Player::changePoints(int pointsChange) {
@@ -271,5 +292,6 @@ int Player::gameOver() {
     totalPoints += (_wisdom*10);
     totalPoints += (_strength*10);
     totalPoints += (_stamina*10);
+    totalPoints += (_salvageAmount*20);
     return totalPoints;
 }

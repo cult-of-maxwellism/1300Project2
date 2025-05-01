@@ -18,5 +18,6 @@ int input_san() {
             }
         }
     }
+    cout << endl;
     return final;
 }

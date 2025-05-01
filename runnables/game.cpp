@@ -48,7 +48,7 @@ Game::Game () {
 "\\ \\___  \\  \\ \\  _-/ \\ \\  __ \\  \\ \\ \\____  \\ \\  __\\                          \n"
 " \\/\\_____\\  \\ \\_\\    \\ \\_\\ \\_\\  \\ \\_____\\  \\ \\_____\\                        \n"
 "  \\/_____/   \\/_/     \\/_/\\/_/   \\/_____/   \\/_____/                        \n";
-    spaceArt();
+    artwork();
     cout <<
 " ______     ______     __         __   __   ______     ______     ______    " << endl <<
 "/\\  ___\\   /\\  __ \\   /\\ \\       /\\ \\ / /  /\\  __ \\   /\\  ___\\   /\\  ___\\   " << endl <<
@@ -59,28 +59,28 @@ Game::Game () {
     int spin = rand()%2;
     switch (spinner()+(spin-1)) {
         case 0:
-        cout << "which is definitely legally distinct from The Lion King." << endl;
+        cout << "Ain’t No Power in the ’Verse Like a Good Salvage Run." << endl;
         break;
         case 1:
-        cout << "AAAAAAAAAAAAAAAAAAAAAAAAH SAVENYA BAGANICHI ALA" << endl;
+        cout << "These are the droids you're looking for." << endl;
         break;
         case 2:
-        cout << "I'm surrounded by idiots." << endl;
+        cout << "In Space, No One Can Hear You Strip a Derelict." << endl;
         break;
         case 3:
-        cout << "\"What\'s a motto?\" \"Nothing. What\'s a motto with you?\"" << endl;
+        cout << "If I was running the company in Hardspace: Shipbreaker, I would have simply cut off oxygen supplies to the striking miners. Seriously, these guys try to tell a gritty story about the power of unions (and the struggles of unionizing) and the best they can come up with for the bad guys to do is, like, fire a middle manager. No one loses food privledge, seriously?" << endl;
         break;
         case 4:
-        cout << "Hakkuna Matata!" << endl;
+        cout << "Live Long and Prosper!" << endl;
         break;
         case 5:
-        cout << "Slimy... Yet Satisfying." << endl;
+        cout << "Explore, Expand, Exploit and Exterminate." << endl;
         break;
         default:
         cout << "Your mom definitely approves." << endl;
     }
-    
-    cout << endl;
+    cout << endl << "+++ +++ +++ +++ +++ +++ +++ +++ +++" << endl;
+    cout << endl << endl;
 
     return;
 }
@@ -90,7 +90,7 @@ void Game::gameMasterInit () {
     cout << endl;
     int playerNum = 0, boardSelect=0;
     while (playerNum > 5 || playerNum <= 0) {
-        cout << "Enter number of players (up to 5)" << endl;
+        cout << "Enter number of players (up to 5)" << endl; //this limit is artifical, up to a theoretical infinite!
         playerNum = input_san();
         if (playerNum > 5) {
             cout << "please double check your maths." << endl;
@@ -99,18 +99,23 @@ void Game::gameMasterInit () {
 
     for (int i = 0; i < playerNum; i++) {
         cout << "Player " << i+1 << "... let's get you started." << endl;
-        cout << "Select difficulty: normal (1) or easy (2)?" << endl;
+        cout << "Select difficulty: hard (1) or easy (2)?" << endl;
         boardSelect = input_san();
 
         boardSelect--;
 
+        cout << endl << "+----+----+----+----+----+----+----+" << endl;
         Characters temp_char = characterSelect();
+        cout << endl << "+----+----+----+----+----+----+----+" << endl;
 
-        Player temp(i, temp_char.age, temp_char.stamina, temp_char.strength, temp_char.wisdom,temp_char.points, boardSelect);
+        Player temp(i, temp_char, boardSelect);
 
+        cout << endl << "+----+----+----+----+----+----+----+" << endl;
         if (boardSelect == 1) {
-            cout << "Since you have selected the easier difficulty, please select an advisor." << endl;
+            cout << "Since you have selected the easier difficulty, please select an consultant - they'll help you through the game." << endl;
+            cout << endl << "+----+----+----+----+----+----+----+" << endl;
             Advisor temp_advise = advisorSelect();
+            cout << endl << "+----+----+----+----+----+----+----+" << endl;
             temp.setAdvisor(temp_advise);
             temp.changeStamina(500);
             temp.changeStamina(500);
@@ -124,21 +129,19 @@ void Game::gameMasterInit () {
         _players.push_back(temp);
     }
 
+    cout << endl << "+----+----+----+----+----+----+----+" << endl;
     Board newBoard(_players);
     newBoard.initializeBoard();
     _theBoard = newBoard;
     _theBoard.displayBoard();
-    //_theBoard.getVectorSize();
     gameMaster();
 }
-
 void Game::gameMaster () {
     int player = 0;
     while ((player=turn(player)) != -1);
     gameOver();
     mainMenu();
 }
-
 int Game::turn (int player) {
     //declaring variables...
     Player currentPlayer = _players.at(player);
@@ -151,21 +154,55 @@ int Game::turn (int player) {
         return -1;
     }
 
+    if (currentPlayer.getWinCond()==true){
+        if (numPlayers == 1) {
+            return -1;
+        } else if (winners >= numPlayers) {
+            return -1;
+        } else if (player == numPlayers-1) {
+            cout << "It's now player 1's turn." << endl;
+            return 0;
+        } else {
+            cout << "It's now player " << player+2 << "'s turn." << endl;
+            return player+1;
+        }
+    }
+
     currentPlayer.menu();
 
     int move_distance = spinner();
 
     //We're doing all the move stuff here...
     tileType = _theBoard.movePlayer(player, move_distance);
-    cout << "Tile type is " << tileType << endl;
     currentPlayer.move(move_distance);
     _theBoard.displayBoard();
+    cout << "You've gone " << move_distance << " distance." << endl;
 
+    //here's the event management!
 
     //Tile type chars are: O (last block), Y (first block), G (grasslands), P (advisor), U (challenge), R (graveyard), N (hyena), B (oasis)cout << "at idx 5";
-    cout << endl << "Landed on a ";
-    if (tileType == 'O') {
-        cout << "victory tile! Congrats!" << endl;
+    cout << endl << "You make your way further into space, in search of salvage, and happen across: ";
+    if (tileType == 'O') { //last block
+        cout << endl;
+        planetArt();
+        int ending = rand()%4;
+        switch (ending) {
+            case 0: 
+            cout << "a perfect marketplace to sell your salvage. Congratulations!" << endl;
+            break;
+            case 1:
+            cout << "one of Lovecraft's old ones. Apparently, Yog-suggoth is a huuuge fan of salvage, so he'll take yours from ya!" << endl;
+            break;
+            case 2:
+            cout << "a really dreary marketplace, pretty damp and it smells. However, there's a zarblaxian collector who will pay top dollar for your salvage!" << endl;
+            break;
+            case 3:
+            cout << "your mother's house. She offers to buy your salvage at above market rates, if you agree to come back. She loves you very much." << endl;
+            break;
+            case 4:
+            cout << "a rowdy group of aliens. They beat you up and take your salvage. Later, you discover plenty of cash in your pocket, and you realize they were just really eager to get a deal done." << endl;
+            break;
+        }
         //just need to make sure I don't add too many winners!
         if (currentPlayer.getWinCond() == false) {
             winners++;
@@ -184,16 +221,16 @@ int Game::turn (int player) {
             return player+1;
         }
 
-    } else if (tileType == 'G') {
-        cout << "grasslands tile. ";
+    } else if (tileType == 'G') { //"grasslands"
+        cout << "an asteroid field. ";
         if (spinner()%2 == 0) {
             event(player);
         } else {
-            cout << "You may rest this turn." << endl;
+            cout << "There's nothing here to salvage or fight, and you may rest this turn." << endl;
         }
 
-    } else if (tileType == 'P') {
-        cout << "consultant tile. You feel greatly rested, and suddently quite wise. " << endl;;
+    } else if (tileType == 'P') { //"advisors"
+        cout << "consultancy firm. You feel greatly rested, and suddently quite wise. This place is full of people who'd love to help on your journey." << endl;;
         userIn = 0;
 
         currentPlayer.changeWisdom(300);
@@ -212,14 +249,14 @@ int Game::turn (int player) {
                 break;                
             } else {
                 Advisor playerAdvisor = currentPlayer.getPlayerAdvisor();
-                cout << "Advisor: " << playerAdvisor.name << " Ability: " << playerAdvisor.ability << endl << "Ability Description" << playerAdvisor.abilityDesc << endl;
+                cout << "Consultant: " << playerAdvisor.name << " Ability: " << playerAdvisor.ability << endl << "Ability Description" << playerAdvisor.abilityDesc << endl;
             }
         }
-    } else if (tileType == 'U') {
-        cout << "a riddle tile! Prepare to be bewitched! " << endl;
+    } else if (tileType == 'U') { //challenge
+        cout << "a locked crate, floating in space. Next to the keypad lock is a single riddle..." << endl;
         riddleEncounter(player);
-    } else if (tileType == 'R') {
-        cout << "a graveyard tile. The sights, the smells, are terrible. You faint and wake up 10 tiles back." << endl;
+    } else if (tileType == 'R') { //graveyard/reaver attack
+        cout << "a unsalvageable ship, destroyed by the reavers. The sights, the smells, are terrible. You run 10 tiles back - hopefully, you've outrun the reavers that did this." << endl;
         int movement = -10;
         currentPlayer.move(movement);
         _theBoard.movePlayer(player, movement);
@@ -227,13 +264,61 @@ int Game::turn (int player) {
         currentPlayer.changeWisdom(-100);
         currentPlayer.changeStamina(-100);
         currentPlayer.changeStrength(-100);
-    } else if (tileType == 'N') {
-        cout << "a combat tile. Be careful - you are being attacked!! " << endl;
-        //int scenario = spinner();
-        attackArt(1);
-        combat(player, 1);
-    } else if (tileType == 'B') {
-        cout << "an oasis. You feel quite rested." << endl;
+    } else if (tileType == 'N') { // "hyena"/violence!
+        cout << "a ship which suddenly attacks you! " << endl;
+        int scenario = spinner();
+        attackArt(scenario);
+        combat(player, scenario);
+    } else if (tileType == 'B') { // salvage!
+        cout << endl;
+        spaceArt();
+        switch (spinner()) {
+            case 0:
+            //if you get this case, you just get double the stam/wis/str bonus
+            cout << "an ancient, autonomous, Bhuddist exploration vessel. You feel quite rested, but there's nothing to salvage here." << endl;
+            currentPlayer.changeStamina(200);
+            currentPlayer.changeStrength(200);
+            currentPlayer.changeWisdom(100);
+            break;
+            case 1:
+            cout << "an ancient, derelict Mormon colony ship, drifting silently through the void. Its systems hum with barely noticeable energy. You feel a mild unease creep over you, as though something is watching. Your nerves are on edge..." << endl;
+            currentPlayer.changeSalvage(700);
+            cout << "These things were massive and full of salvageable items! You find 700, exellent condition, pieces of salvage." << endl;
+            break;
+            case 2:
+            cout << "an old, autonomous Spacer's Guild freighter, floating quietly in the cold expanse. The ship seems abandoned, yet the low hum of ancient machinery resonates like a warning. You can almost feel the presence of something otherworldly lurking in the shadows." << endl;
+            currentPlayer.changeSalvage(800);
+            cout << "These old Spacer's Guild ships are chock-full of good material. You find 800 pieces of sellable salvage." << endl;
+            break;
+            cout << "a shockingly modern racing ship, in a decaying orbit around a nearby moon. It doesn't respond to hails, and no life signs are present. Plugging power into the computer, you discover the occupants accidentally spaced themselves during a poorly planned game of drunk electro-ball." << endl;
+            currentPlayer.changeSalvage(300);
+            cout << "You find 300 items that you could sell at a good price." << endl;
+            case 3:
+            cout << "an abandoned Higaran mothership, from before the Great War. Many thousands of people used to serve on these, but it's been centuries, and it's quite clear you're alone. Despite this, you still feel warm and comforted." << endl;
+            currentPlayer.changeSalvage(500);
+            cout << "You find 500 pieces of good salvage." << endl;
+            break;
+            case 4:
+            cout << "a mysterious, ancient Terran survey vessel, drifting through space, its purpose long forgotten. The interior is unnervingly quiet, and the dim lights flicker erratically. You can’t shake the feeling that something is wrong here, as if the ship has a secret it’s trying to keep." << endl;
+            currentPlayer.changeSalvage(200);
+            break;
+            case 5:
+            cout << "a colossal, silent warship from the Elysian Star Empire, hanging motionless in the void. The ship is massive, and its dark, lifeless corridors seem to pulse with an oppressive, ominous energy. Every step you take feels like you’re walking deeper into a trap." << endl;
+            cout << "You find weapons, command consoles, and chairs, amounting to 400 pieces of salvage." << endl;
+            currentPlayer.changeSalvage(400);
+            break;
+            case 6:
+            cout << "a rusted and forgotten mercenary transport ship, adrift in the dark reaches. The bodies of some of the former crew float nearby, victims of what appears to have been a power struggle on board. The ship feels defiant.";
+            currentPlayer.changeSalvage(100);
+            cout << "You find a few rusted weapons. As you turn to leave, dejectedly, the a box with the Captian's logo on it catches your eye. It's full of precious metals: not enough to be lifechanging, but enough nonetheless." << endl << "You gain 100 salvage items." << endl;
+            break;
+            default:
+            //if you get this case, you just get double the stam/wis/str bonus
+            cout << "an ancient, autonomous, Bhuddist exploration vessel. You feel quite rested, but there's nothing to salvage here." << endl;
+            currentPlayer.changeStamina(200);
+            currentPlayer.changeStrength(200);
+            currentPlayer.changeWisdom(100);
+        }
         //200 Stamina, Strength, and Wisdom Points.
         currentPlayer.changeStamina(200);
         currentPlayer.changeStrength(200);
@@ -274,15 +359,15 @@ void Game::advisorPuller(string filename) {
         while (getline(linestream, currentText, '|')) {
             if (idx == 0) {
                 currentNum = stod(currentText);
-                currentAdvisor.num =  currentNum;
+                currentAdvisor.num = currentNum;
                 idx ++;
             } else if (idx == 1) {
                 currentAdvisor.name=currentText;
                 idx++;
-            } else if (idx == 3) {
+            } else if (idx == 2) {
                 currentAdvisor.ability=currentText;
                 idx ++;
-            } else if (idx == 4) {
+            } else if (idx == 3) {
                 currentAdvisor.abilityDesc=currentText;
                 _advisors.push_back(currentAdvisor);
                 idx = 0;
@@ -451,6 +536,7 @@ Characters Game::characterSelect() {
         userChoose = input_san();
     }
 
+    //This picks out the character the user chooses, and deletes said character from the characters vectors
     Characters chosen_char = _characters[userChoose-1];
     _characters.erase(_characters.begin()+(userChoose-1));
 
@@ -460,18 +546,21 @@ Advisor Game::advisorSelect() {
     cout << "Time to chose a advisor! We have the following avalible!" << endl;
 
     int vector_size = _advisors.size(), userChoose = 0;
+
     cout << "advisor size: " << vector_size << endl;
 
     for (int i = 0; i < vector_size-1; i++) {
-        cout << "Advisor " << i+1 << "    " << _advisors[i].name << endl
+        cout << "Advisor " << i+1 << ":    " << _advisors[i].name << endl
              << "Ability: " << _advisors[i].ability << endl
              << "Description: " << _advisors[i].abilityDesc << endl;
+        cout << "-------" << endl;
     }
     while (userChoose <= 0 || userChoose > vector_size) {
         cout << "Choose from advisors (1 to " << vector_size << ")" << endl;
         userChoose = input_san();
     }
 
+    // this here sets the advisor the user choses, and deletes the advisor from the Advisors vector, to make sure no one else can use that Advisor.
     Advisor chosen_advisor = _advisors[userChoose-1];
     _advisors.erase(_advisors.begin() + (userChoose-1));
 
@@ -493,7 +582,6 @@ void Game::mainMenu() {
             gameMasterInit();
             break;
             case 2:
-            cout << "Under Construction!" << endl;
             highScore();
             break;
             case 3:
@@ -525,16 +613,8 @@ void Game::event(int player) {
         if (chosenEvent.advisor == 0) {
             cout << "Nothing you can do can stop this. You lose " << chosenEvent.points << " points." << endl;
             _players[player].changePoints(chosenEvent.points);
-        } else if (chosenEvent.advisor == 1 && _players[player].getPlayerAdvisor().name == "Rafiki") {
-            cout << "Rafiki uses his powers of invisibility to save you!" << endl;
-        } else if (chosenEvent.advisor == 2 && _players[player].getPlayerAdvisor().name == "Nala") { 
-            cout << "Nala uses her power of night vision to save you!" << endl;
-        } else if (chosenEvent.advisor == 3 && _players[player].getPlayerAdvisor().name == "Sarabi") {
-            cout << "Sarabi uses her powers of energy manipulation to save you!" << endl;
-        } else if (chosenEvent.advisor == 4 && _players[player].getPlayerAdvisor().name == "Zazu") {
-            cout << "Zazu uses his powers of weather control to save you!" << endl;
-        } else if (chosenEvent.advisor == 5 && _players[player].getPlayerAdvisor().name == "Sarafina") {
-            cout << "Sarafina uses her power of super speed to save you!" << endl;
+        } else if (chosenEvent.advisor == _players[player].getPlayerAdvisor().num) {
+            cout << "Your consultant used their skills to save you!" << endl;
         } else {
             _players[player].changePoints(chosenEvent.points);
             cout << "You lose " << chosenEvent.points << " points!" << endl;
@@ -551,7 +631,7 @@ void Game::riddleEncounter(int player) {
     int riddleSize = _riddles.size();
     int riddleChooser = rand()%riddleSize;
 
-    cout << "You must solve a riddle to continue!" << endl << _riddles[riddleChooser].riddle << endl;
+    cout << "You must solve this riddle to continue!" << endl << _riddles[riddleChooser].riddle << endl;
     cin.clear();
     cin >> userAnswer;
 
@@ -588,7 +668,7 @@ void Game::gameOver() {
     //run everything again to get an idea of who's got what score
     for (int i = 0; i < playerSize; i++) {
         cout << "Player " << i+1 << "'s score is: " << _players.at(i).gameOver() << endl;
-        record_Score << _players.at(i).getPlayerName() << "|" << _players.at(i).gameOver() << endl;
+        record_Score << _players.at(i).getPlayerName() << "|" << _players.at(i).getCharName() << "|" << _players.at(i).gameOver() <<endl;
     }
     
     //and do the victory logic!
@@ -642,6 +722,9 @@ void Game::highScore() {
                 playerName = currentIn;
                 currentScore.name = playerName;
                 playerIndex++;
+            } else if (playerIndex == 1) {
+                currentScore.charName = currentIn;
+                playerIndex++;
             } else {
                 playerScore = stoi(currentIn);
                 currentScore.points = playerScore;
@@ -662,7 +745,7 @@ void Game::highScore() {
     }
 
     cout << "The top 10 players of all time are:" << endl
-         << "Name:           - Points:" << endl;
+         << "Name:           Character: - Points:" << endl;
 
     for (int i = 0; i < 10 && i < boardSize; i++) {
         string output = scoreboard[i].name;
@@ -675,8 +758,21 @@ void Game::highScore() {
                 output.append(" ");
             }
         }
+
+        string output2 = "(as ";
+        output2 += scoreboard[i].charName;
+        output2 += ")";
+        if (output2.length() > 10) {
+            while (output2.length() > 10) {
+                output2.pop_back();
+            }
+        } else if (output2.length() < 10) {
+            while (output2.length() < 10) {
+                output2.append(" ");
+            }
+        }
         
-        cout << output << " -  " << scoreboard[i].points << endl;
+        cout << output << output2 << " -  " << scoreboard[i].points << endl;
     }
 
     return;
@@ -689,10 +785,10 @@ void Game::combat(int player, int scenario) {
     Enemy badguy;
     playerAttack = (_players.at(player).getStrength())/100;
     playerDefense = (_players.at(player).getWisdom())/100;
-    playerHealth = (_players.at(player).getStamina())/100;
+    playerHealth = (_players.at(player).getStamina())/50;
 
-    badguy.attack = (rand() % ((playerAttack+2) + 1 - (playerAttack-3)) + (playerAttack-3));
-    badguy.defense = (rand() % ((playerDefense+2) + 1 - (playerDefense-3)) + playerAttack-3);
+    badguy.attack = (rand() % ((playerAttack+5) + 1 - (playerAttack-3)) + (playerAttack-3));
+    badguy.defense = (rand() % ((playerDefense+4) + 1 - (playerDefense-3)) + playerAttack-3);
     badguy.health = (rand()% (5 - 1) + 1);
 
     if (badguy.attack <= 0) {
@@ -703,11 +799,27 @@ void Game::combat(int player, int scenario) {
     }
 
     while (badguy.health > 0 && playerHealth > 0) {
+        //I was planning on adding different possible bad guys, but ran out of energy.
         cout << "Combat encounter!" << endl
-             << "         Hyena:        Player:" << endl
-             << "ATK    : " << badguy.attack <<  "        " << playerAttack << endl
-             << "DEF    : " << badguy.defense << "        " << playerDefense << endl
-             << "Health : " << badguy.health << "        " << playerHealth << endl;
+             << "         Alien:      Player:" << endl;
+        //attack stats
+        string output1 = to_string(badguy.attack);
+        while (output1.length() < 12) {
+            output1+= " ";
+        }
+        cout << "ATK    : " << badguy.attack <<  "        " << playerAttack << endl;
+        //def
+        output1 = to_string(badguy.defense);
+        while (output1.length() < 12) {
+            output1+= " ";
+        }
+        cout << "DEF    : " << badguy.defense << "        " << playerDefense << endl;
+        //health
+        output1 = to_string(badguy.health);
+        while (output1.length() < 12) {
+            output1+= " ";
+        }
+        cout << "Health : " << badguy.health << "        " << playerHealth << endl;
 
         cout << "Attack (1), Sacrifice Advisor (2), or Die (3):" << endl;
         int menu = input_san();
@@ -718,7 +830,7 @@ void Game::combat(int player, int scenario) {
                 attackTurn += spinner();
             }
             cout << attackTurn << "!" << endl;
-            cout << "The hyena rolled a ";
+            cout << "The aliens rolled a ";
             for (int i = 0; i < badguy.defense; i++) {
                 defenseTurn += spinner();
             }
@@ -731,12 +843,12 @@ void Game::combat(int player, int scenario) {
                 cout << " no damage!" << endl;
             }
             //now for the defensive side!
-            cout << "The hyena attacks!" << endl;
+            cout << "The aliens attack!" << endl;
             attackTurn = 0;
             defenseTurn = 0;
             healthChange = 0;
 
-            cout << "The hyena rolled a ";
+            cout << "The alien rolled a ";
             for (int i = 0; i < badguy.attack; i++) {
                 attackTurn += spinner();
             }
@@ -751,7 +863,7 @@ void Game::combat(int player, int scenario) {
                 cout << -healthChange << " damage!";
                 playerHealth += healthChange;
             } else {
-                cout << " no damage!" << endl;
+                cout << "no damage!" << endl;
             }
         } else if (menu == 2) {
             if (_players.at(player).getPlayerAdvisor().name == "") {
@@ -771,43 +883,34 @@ void Game::combat(int player, int scenario) {
     } else if (playerHealth <= 0) {
         cout << "You have lost this encounter, prepare to move back." << endl;
         _players.at(player).move(-10);
+        _players.at(player).changeStamina((-(_players.at(player).getSalvage()/2)));
         _theBoard.movePlayer(player, -10);
     }
     return;
 }
 
-//art displays!
-/*
-void Game::artwork(int type) {
-    if (type == 0) {
-        type = spinner();
-    }
-    switch (type) {
+//art stuff!
+void Game::artwork () {
+    int choseArt = rand()%3;
+    switch (choseArt) {
+        case 0: 
+        attackArt(spinner());
+        break;
         case 1:
         spaceArt();
         break;
         case 2:
-        //consultArt();
+        planetArt();
         break;
         case 3:
-        //graveArt();
-        break;
-        case 4: 
-        attackArt();
-        break;
-        case 5:
-        //oasisArt();
-        break;
-        case 6:
-        //victoryArt();
+        planetArt();
         break;
         default:
-        //spaceArt();
+        spaceArt();
     }
 }
-*/
-
 void Game::attackArt(int scenario) {
+    //I was planning on adding different possible bad guys, but ran out of energy.
     switch (scenario) {
         case 1:
     cout << "Aliens!!!" << endl <<
@@ -834,7 +937,6 @@ void Game::attackArt(int scenario) {
         cout << "whoops" << endl;
     }
 }
-
 void Game::spaceArt() {
     int decide = spinner();
     if (decide == 1) {
@@ -973,83 +1075,146 @@ void Game::spaceArt() {
 ";.;.:.;...:;.............................++:..                                                      " << endl <<
 "..:......................................+.X      .                                                 " << endl;
     } else if (decide == 5) {
-        cout <<                                                                                                                   
-"        #                                                                                             " << endl <<
-"        ######                  .################                                                     " << endl <<
-"          #######           -########################                                                 " << endl <<
-"           ##----####     ##############################                                              " << endl <<
-"             ##- #---#####################################                                            " << endl <<
-"               -#    ---#############################-######                                          " << endl <<
-"                  #  ####--##########################----##--                                         " << endl <<
-"                   #  ######--#########################-------                                        " << endl <<
-"                  ######  #####--########################------                                       " << endl <<
-"                  #########  ####+--################------------                                      " << endl <<
-"                 #############  ####---###############----------                                      " << endl <<
-"                 ################  ####--##########--#--------                                        " << endl <<
-"            ######################## #####--#######------------                                       " << endl <<
-"           ######    #################  ####---######------. ---                                      " << endl <<
-"          # ### #    ####################  ####--##-##-----                                           " << endl <<
-"           #####     ####################--- -###---##--------                                        " << endl <<
-"            ####   #########################--  #-----##    --                                        " << endl <<
-"                 ############################----     ---##                                           " << endl <<
-"                  #######################----------      --##                                         " << endl <<
-"                   ########################----------      --#-                                       " << endl <<
-"                    ##################---####----            ---+#                                    " << endl <<
-"                     ###########---###-------  ----            ---##                                  " << endl <<
-"                      ###########------------     ---       --   ---##                                " << endl <<
-"                        ############-----   ----               ##----##-                              " << endl <<
-"                          ####------------    ---                  -#--##-                            " << endl <<
-"                             ###------------                          #--#-                           " << endl <<
-"                                  ------   -                                                          " << endl;
-    } else if (decide == 6) {
-cout <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›66666üüüüÏÏÏÏz›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›666GÞÞÞÞÞÞÞÇÇÇ666zzí›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—6ÇGGGGGÞÞÞÞÞÞÞÇ66666üüíí›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÇÇGGGGGGGGÞÞÞÇÇÇÇÇÇ6666üüü{{›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÇÇgggGGGGGGÞÞÞÇÇÇÇÇÇ66666üüü{{›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÇÇgggggGGGÞÞÞÞÞÞÇÇÇÇÇüüüüüÏÏÏÏ———›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÇÇggggGGGGGGÞÞÞÞÞÇÇ6666üüüüÏÏÏÏÏ——›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—››Ç6ggggGGGGGGÞÞÞÇÇÇÇÇ666üüüüüüÏÏÏ——›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—6ggggggGGGGÞÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏz—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ügggggGGGGGÞÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›üüggggGGGGGGÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÏÏggggGGGGGÞÞÞÞÞÇÇÇÇ666üüüüüüÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÏzgGGGGÞÞÞÞÇÇÇÇÇÇÇ6666üüüüÏÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›zzGGGÞÞÞÞÇÇÇÇÇ6666üüüüÏüüÏÏÏ—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ííÞÞÇÇÇÇÇÇÇÇ6666üüüüüÏÏÏÏz—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›í{ÇÇÇÇ6666666üüüüüÏÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—{{{6666üüüüÏÏüüÏÏ—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—————————››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
-"—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—››››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›———›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
-"›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl;
-    } else {
-        cout <<
-"o               .        ___---___                    .                   " << endl <<
-"       .              .--\\        --.     .     .         ." << endl <<
-"                    ./.;_.\\     __/~ \\.     " << endl <<
-"                   /;  / `-'  __\\    . \\                " << endl <<            
-" .        .       / ,--'     / .   .;   \\        |" << endl <<
-"                 | .|       /       __   |      -O-       ." << endl <<
-"                |__/    __ |  . ;   \\ | . |      |" << endl <<
-"                |      /  \\_    . ;| \\___|    " << endl <<
-"   .    o       |      \\  .~\\___,--'     |           ." << endl <<
-"                 |     | . ; ~~~~\\_    __|" << endl <<
-"    |             \\    \\   .  .  ; \\  /_/   ." << endl <<
-"   -O-        .    \\   /         . |  ~/                  ." << endl <<
-"    |    .          ~\\ \\   .      /  /~          o" << endl <<
-"  .                   ~--___ ; ___--~       " << endl <<
-"                 .          ---         .              -JT        " << endl;
+
     }
 }
-    
+void Game::planetArt() {
+    int decide = spinner();
+    if (decide == 1) {
+    cout <<                                                                                                                   
+    "        #                                                                                             " << endl <<
+    "        ######                  .################                                                     " << endl <<
+    "          #######           -########################                                                 " << endl <<
+    "           ##----####     ##############################                                              " << endl <<
+    "             ##- #---#####################################                                            " << endl <<
+    "               -#    ---#############################-######                                          " << endl <<
+    "                  #  ####--##########################----##--                                         " << endl <<
+    "                   #  ######--#########################-------                                        " << endl <<
+    "                  ######  #####--########################------                                       " << endl <<
+    "                  #########  ####+--################------------                                      " << endl <<
+    "                 #############  ####---###############----------                                      " << endl <<
+    "                 ################  ####--##########--#--------                                        " << endl <<
+    "            ######################## #####--#######------------                                       " << endl <<
+    "           ######    #################  ####---######------. ---                                      " << endl <<
+    "          # ### #    ####################  ####--##-##-----                                           " << endl <<
+    "           #####     ####################--- -###---##--------                                        " << endl <<
+    "            ####   #########################--  #-----##    --                                        " << endl <<
+    "                 ############################----     ---##                                           " << endl <<
+    "                  #######################----------      --##                                         " << endl <<
+    "                   ########################----------      --#-                                       " << endl <<
+    "                    ##################---####----            ---+#                                    " << endl <<
+    "                     ###########---###-------  ----            ---##                                  " << endl <<
+    "                      ###########------------     ---       --   ---##                                " << endl <<
+    "                        ############-----   ----               ##----##-                              " << endl <<
+    "                          ####------------    ---                  -#--##-                            " << endl <<
+    "                             ###------------                          #--#-                           " << endl <<
+    "                                  ------   -                                                          " << endl;
+    } else if (decide == 2) {
+    cout <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›66666üüüüÏÏÏÏz›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›666GÞÞÞÞÞÞÞÇÇÇ666zzí›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—6ÇGGGGGÞÞÞÞÞÞÞÇ66666üüíí›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÇÇGGGGGGGGÞÞÞÇÇÇÇÇÇ6666üüü{{›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÇÇgggGGGGGGÞÞÞÇÇÇÇÇÇ66666üüü{{›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÇÇgggggGGGÞÞÞÞÞÞÇÇÇÇÇüüüüüÏÏÏÏ———›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÇÇggggGGGGGGÞÞÞÞÞÇÇ6666üüüüÏÏÏÏÏ——›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—››Ç6ggggGGGGGGÞÞÞÇÇÇÇÇ666üüüüüüÏÏÏ——›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—6ggggggGGGGÞÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏz—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ügggggGGGGGÞÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›üüggggGGGGGGÞÞÞÞÇÇÇÇ66ÇÇ666üüüÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ÏÏggggGGGGGÞÞÞÞÞÇÇÇÇ666üüüüüüÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›ÏzgGGGGÞÞÞÞÇÇÇÇÇÇÇ6666üüüüÏÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›zzGGGÞÞÞÞÇÇÇÇÇ6666üüüüÏüüÏÏÏ—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—ííÞÞÇÇÇÇÇÇÇÇ6666üüüüüÏÏÏÏz—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›í{ÇÇÇÇ6666666üüüüüÏÏÏÏ›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—{{{6666üüüüÏÏüüÏÏ—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—————————››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›" << endl <<
+    "—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—››››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›———›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›››—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl <<
+    "›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—›—" << endl;
+    } else if (decide == 3) {
+        cout <<
+    "o               .        ___---___                    .                   " << endl <<
+    "       .              .--\\        --.     .     .         ." << endl <<
+    "                    ./.;_.\\     __/~ \\.     " << endl <<
+    "                   /;  / `-'  __\\    . \\                " << endl <<            
+    " .        .       / ,--'     / .   .;   \\        |" << endl <<
+    "                 | .|       /       __   |      -O-       ." << endl <<
+    "                |__/    __ |  . ;   \\ | . |      |" << endl <<
+    "                |      /  \\_    . ;| \\___|    " << endl <<
+    "   .    o       |      \\  .~\\___,--'     |           ." << endl <<
+    "                 |     | . ; ~~~~\\_    __|" << endl <<
+    "    |             \\    \\   .  .  ; \\  /_/   ." << endl <<
+    "   -O-        .    \\   /         . |  ~/                  ." << endl <<
+    "    |    .          ~\\ \\   .      /  /~          o" << endl <<
+    "  .                   ~--___ ; ___--~       " << endl <<
+    "                 .          ---         .              -JT        " << endl;
+    } else if (decide == 4) {
+        cout <<
+"                                                      .....................:.:::::::::::::::::::::::" << endl << 
+"                                                        . ........................::::::::::::::::::" << endl << 
+"                                                            . .........................:.:.:::::::::" << endl << 
+"                                                                 . ..............................:::" << endl << 
+"                                                               .        .. ........................." << endl << 
+"                                                                            . . ...................." << endl << 
+"                                                                                    . .............." << endl << 
+"                                               . . . . . .                                 . ......." << endl << 
+"                                            .  . ..... . .                                          " << endl << 
+"                                          . .............. .  =                                     " << endl << 
+"                                        . . ...%@@@@%......#:   %                                   " << endl <<
+"                                        . ..@@@@@@@@@@@@@..=-@@                                     " << endl << 
+"                                      . . =@@@@@@@@@@@@@@=. .*%                                     " << endl << 
+"                                       . .@@@@@@@@@@@@@@@@:@* :                                     " << endl << 
+"                                       . @@@@@@@@@@@@@@@@@@..==.                                    " << endl << 
+"                                       . @@@@@@@@@@@@@@@@@@. .                                      " << endl << 
+"                                       *@:@@@@@@@@@@@@@@@@. .                                       " << endl <<
+"                                     -@ - -@@@@@%@@@@@@@@=. .                                       " << endl << 
+"                                   % @ -= =@%@@@@@@@@@@@. .                                         " << endl << 
+"                                  .%   #-  .%% *@@@@*. . .                                          " << endl << 
+"                                           #%% . . . .                                              " << endl << 
+"                                                                                                    " << endl << 
+"                                                                                                    " << endl << 
+"                                                                                                    " << endl;
+    } else {
+        cout <<
+"                          ....:::;;;;;+::::.                  .:XXXXxxx++++++;;;;;::;::;:::;++:::::&" << endl << 
+" ;                        ...::;;;;;++++:::.                  .:XXxxx++++++;;++x:::;:;:::::+x::::&&:" << endl << 
+"                          .;.:;;;;+++++:::.                  ..:xxxxxx+++;;;;;:;:;::::;:::::::::&&::" << endl << 
+"                           ..:::++++++::::.                  ..:xxxxXX+;;;;;::::;:;:;:::::::::&&::::" << endl << 
+"                            ...:::::::::.                    ..:xxXXX+;;;;:;:;;:::::::::::::&&::::::" << endl << 
+"                              ....::...                       .:+++;;;;;:;::;:::;:::::::;;&&::::::::" << endl << 
+"                                                              .:++;;;;::;:;:::;::::::::;&&++::::::::" << endl << 
+"                        :                                     .::;;;;::;::;::::::::::;&&+++x::::::::" << endl << 
+"                                                  ;$:          .:;;::;::;:::::::::::&&:++x::::::::::" << endl << 
+"          .:;++x;:   .. .. ... .                                .:X::;:::;:::;+x::&&::::::::::::::::" << endl << 
+"        .++++xxxXXX;.. ......... .. ..    ;                     ..::;::;::::::::&&::::::::::::::::::" << endl << 
+"       :++++xxXXXXXX;..::::::::......  ..                    .   ..:::::::::::&&::::::::::::::::::::" << endl << 
+"       ;++xxXXXXXX$$$$;:::::::::::::....  .                .       .:::::::&&&::::::::::::::::::::;;" << endl << 
+"       ;xxXXXXX$$$$x:............::::::... ..             .         ..:::&&::::::::::::::::;;:::::::" << endl << 
+"       .XXXXX$$$;.:........:.......::::::...  .          .            XXX:::::::::::::::::::::::::;;" << endl << 
+"     .  .;X$$$:.:::&&.::.:::.:.......::::::... .        .:         xxX  ..::::::::::::::::::::::;;;;" << endl << 
+"   :. ....:::..:.&&.:::::::::::::..:..::::::..  .       :       X$x        ..:::::::::::::::::;;;;;:" << endl << 
+"      ...:::......:::::::::::::::::.:..::::::..  .      :; ;++++:::            ...:::::::::::::::..." << endl << 
+"    ....:::....&:.:::::::::::::::.::...:::::::..   .                              :  ........       " << endl << 
+"   .  ..::....::::::::::::::::::::::.:..::::::... .                             X                   " << endl << 
+"   . ...::...:XX$$$$$$$$::::::::$XXXXXXXXX:::::..                                                   " << endl << 
+"    ...:::.++x+xxxxxXXXXXXX:;xxxxxxxxxxxxxxX:::...  .                                        X:     " << endl << 
+"  .  ..:::+++++++++++++++++++++++++++++++$$$:::.. .                                                 " << endl << 
+"   . ...::;;;;;;;;;;;;;;+++++++++;;;;++xXXXX::... .       :                                         " << endl << 
+"   .  ..:::;;;;;;;$$+;;;;;;;;;;;;;;+++++xxXX::..                           ..:::.                   " << endl << 
+"    .. ..::;xxxxXXXXXXXXX$;;;;;;;;;;;+++xxX++;;;;.                        ::;+++::.                 " << endl << 
+"      ...:::+++++++++++++xxxx;;;;;;;+++$&&+++;;;;  .                     .::++xXX:.                 " << endl << 
+"   .  . ..:::.;;;;;;;;;;;;+++++++xXXXX$$$::+;;;;;                        .::xXXX:::             .   " << endl << 
+"       . ...:::::::::;;;;;;;;++++xxXX$$:::....   .                         .:::::.            $     " << endl << 
+"     .   . ...::::::::::;;;;;+++xXXX$:::....  .                                   :;                " << endl;
+        }
+}

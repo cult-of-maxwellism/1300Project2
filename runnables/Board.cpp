@@ -56,7 +56,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                     special_tiles++;
                 } else if (i <= (total_tiles/2) && special_tiles < 30) {
                     tileType=rand()%20;
-                    if (tileType >= 0 && tileType <= 10) {
+                    if (tileType >= 0 && tileType <= 10 && _tiles[player_index][i-1].color != 'R') {
                         temp.color = 'R'; //red, for graveyards
                         special_tiles++;
                     } else if (tileType > 10 && tileType <= 15) {
@@ -101,7 +101,7 @@ void Board::initializeTiles(int player_index, int boardType) {
             } else if (tileType <= 4 && special_tiles < 20) { //20% chance
                 temp.color = 'N'; //brown, for hyenas
                 special_tiles++;
-            } else if (tileType >= 10 && tileType <= 14) { //20% chance
+            } else if (tileType >= 10 && tileType <= 14 && _tiles[player_index][i-1].color != 'R') { //20% chance, unless the last tile was also one of these
                 temp.color = 'R'; //red, for graveyards
                 special_tiles++;
             } else if (tileType >= 15 && tileType <= 18) { //15% chance
@@ -122,7 +122,7 @@ void Board::initializeTiles(int player_index, int boardType) {
                     temp.color = 'B'; //blue for oasis
                     special_tiles++;
                 } else if (tileType > 4 && tileType <= 10) { //30% chance
-                    temp.color = 'R'; //purple for challenge tile
+                    temp.color = 'U'; //purple for challenge tile
                     special_tiles++;
                 }
             } else if (green_count < 30) {
@@ -230,7 +230,6 @@ void Board::getVectorSize () {
 }
 
 char Board::movePlayer(int player_index, int distance) {
-    cout << "Players size at movePlayer" << _board_players.size() << endl;
     // Increment player position
     _board_players.at(player_index).position += distance ;
     if (_board_players.at(player_index).position >= _BOARD_SIZE-1) {

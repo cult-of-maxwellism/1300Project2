@@ -46,13 +46,10 @@ class Game {
 
     //aesthetics generator:
     //Tile type chars are: O (last block), Y (first block), G (space), P (consultant), U (challenge), R (graveyard), N (hyena), B (oasis)cout << "at idx 5";
-    //void artwork(int type);
+    void artwork();
     void spaceArt();
-    //void consultArt();
-    //void graveArt();
     void attackArt(int scenario);
-    //void oasisArt();
-    // /void victoryArt();
+    void planetArt();
 
     //variables
     std::vector<Characters> _characters;
