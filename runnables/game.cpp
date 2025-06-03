@@ -68,7 +68,7 @@ Game::Game () {
         cout << "In Space, No One Can Hear You Strip a Derelict." << endl;
         break;
         case 3:
-        cout << "If I was running the company in Hardspace: Shipbreaker, I would have simply cut off oxygen supplies to the striking miners. Seriously, these guys try to tell a gritty story about the power of unions (and the struggles of unionizing) and the best they can come up with for the bad guys to do is, like, fire a middle manager. No one loses food privledge, seriously?" << endl;
+        cout << "If I was running the company in Hardspace: Shipbreaker, I would have simply cut off oxygen supplies to the striking miners. Seriously, these guys try to tell a gritty story about the power of unions (and the struggles of unionizing) and the best they can come up with for the bad guys to do is, like, fire a middle manager. No one loses food privileges, seriously?" << endl;
         break;
         case 4:
         cout << "Live Long and Prosper!" << endl;
@@ -324,6 +324,8 @@ int Game::turn (int player) {
         currentPlayer.changeStrength(200);
         currentPlayer.changeWisdom(100);
     }
+
+    _players.at(player) = currentPlayer;
     cout << "Player " << player+1 << "'s turn is over." << endl
          << "+-------------+-------------+" << endl;
     if (player == numPlayers-1) {
@@ -785,7 +787,7 @@ void Game::combat(int player, int scenario) {
     Enemy badguy;
     playerAttack = (_players.at(player).getStrength())/100;
     playerDefense = (_players.at(player).getWisdom())/100;
-    playerHealth = (_players.at(player).getStamina())/50;
+    playerHealth = (_players.at(player).getStamina())/100;
 
     badguy.attack = (rand() % ((playerAttack+5) + 1 - (playerAttack-3)) + (playerAttack-3));
     badguy.defense = (rand() % ((playerDefense+4) + 1 - (playerDefense-3)) + playerAttack-3);
